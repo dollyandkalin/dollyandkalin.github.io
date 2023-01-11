@@ -14,7 +14,7 @@
 
 
 
-<title>test_my_site | Hexo</title>
+<title>Unity Tips | Hexo</title>
 
 
 
@@ -108,16 +108,24 @@
     <div class="post-info">
         <div class="tag-list">
             
+                
+                    <span class="post-tag">
+                        <a href="/tags/Unity/">
+                            Unity
+                        </a>
+                    </span>    
+                           
+            
         </div>
         <div class="post-title">
             
             
-                test_my_site
+                Unity Tips
             
             
         </div>
         <span class="post-date">
-            Nov 28, 2022
+            Jan 11, 2023
         </span>
     </div>
     <div class="post-img">
@@ -127,7 +135,12 @@
     </div>
 </div>
     <div class="post-content">
-    
+    <h1 id="工作学习中积累的Unity小技巧"><a href="#工作学习中积累的Unity小技巧" class="headerlink" title="工作学习中积累的Unity小技巧"></a>工作学习中积累的Unity小技巧</h1><h2 id="写作缘由"><a href="#写作缘由" class="headerlink" title="写作缘由:"></a>写作缘由:</h2><p>一些知识点比较琐碎，容易忘记，又不需要单独开一篇文章，故累加到一起。</p>
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips:"></a>Tips:</h2><h3 id="1-Transform与foreach"><a href="#1-Transform与foreach" class="headerlink" title="1.Transform与foreach"></a>1.Transform与foreach</h3><p>在学习回合战旗游戏制作时看到一段代码让我一下有点懵：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">foreach</span> (Transform transform <span class="keyword">in</span> actionButtonContainer)</span><br><span class="line">&#123;</span><br><span class="line">    Destroy(transform.gameObject);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>什么？通常和foreach使用相关的不都是list、dictionary等容器类么，难道Transform也是容器类？</p>
+<p>F12点进去一看，还真是……<br><img src="http://ec8901.bvimg.com/19171/dcb72aefaf303b0c.png" alt="transform定义"><br>既然继承IEnumerable，也就可以使用迭代器foreach来遍历了。</p>
+
 </div> 
 
 <script>
@@ -138,17 +151,12 @@
     <nav class="post-nav">
         <div class="prev-item">
            
-                <div class="icon arrow-left"></div>
-                <div class="post-link">
-                    <a href="/2023/01/11/Unity-Tips/">Prev</a>
-                </div>
-            
         </div>
         <div class="next-item">
             
                 <div class="icon arrow-right"></div>
                 <div class="post-link">
-                  <a href="/2022/11/28/hello-world/">Next</a>  
+                  <a href="/2022/11/28/test-my-site/">Next</a>  
                 </div>  
             
         </div>
