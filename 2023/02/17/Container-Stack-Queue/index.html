@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>Container: Stack &amp; Queue | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Frame.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Container: Stack &amp; Queue
+            
+            
+        </div>
+        <span class="post-date">
+            Feb 17, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>我们可以用容器（Container）来指代一种抽象数据类型，其允许存储和检索数据项，而不依赖于数据项的内容（依赖于数据内容检索的例子是字典（Dictionary），因为字典是通过数据项的key和value来检索）。</p>
+<p>堆栈（Stack）和队列（Queue）是最重要的两种容器类型，它们具有不同的查询顺序和插入顺序：</p>
+<ul>
+<li><font color ="yellow"><b>堆栈</b></font>。支持先入后出（LIFO）的查询顺序。堆栈实现简单，非常高效。因此，当检索顺序根本不重要时，例如在批处理时，堆栈可能是更适合的容器。<br>堆栈的put和get操作通常被称为推送（Push）和弹出（Pop）。<br>Push(x,s)：将数据项x插入到堆栈s的顶部。<br>Pop(s):  返回（并删除）堆栈s的顶部项目。<br>LIFO顺序出现在现实世界中许多地方，比如人们挤上地铁又下来；将食物放进冰箱后再取出。在算法上，LIFO往往发生在执行递归的过程中。</li>
+<li><font color ="yellow"><b>队列</b></font>。支持先进先出的查询顺序。显然这种查询顺序方式对控制服务等待时间最最公平。队列的实现比堆栈更棘手，因此一般用在顺序很关键的应用上（比如某些模拟）。<br>队列的put和get操作通常被称为入队（Enqueue）和出队（Dequeue）。<br>Enqueue(x,q)：将数据项x插入到队列q的最后。<br>Dequeue(q):  返回（并删除）队列q的首项。<br><font color ="red"><b>稍后我们在图论有关章节的讨论中将把队列看作是控制宽度优先搜索（BFS）的基本数据结构。</b></font><br>可以使用数组或链表有效地实现堆栈和队列。关键的问题是容器大小的上限是否预先已知，从而允许使用静态分配的数组。</li>
+</ul>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/02/17/Continuous-Structure-Linked-Structure/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
