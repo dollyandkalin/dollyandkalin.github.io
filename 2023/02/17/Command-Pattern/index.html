@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>Command Pattern | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Frame.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Command Pattern
+            
+            
+        </div>
+        <span class="post-date">
+            Feb 17, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h1 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h1><h2 id="什么是命令模式"><a href="#什么是命令模式" class="headerlink" title="什么是命令模式"></a>什么是命令模式</h2><p>”将一个请求封装成一个对象，从而允许你使用不同的请求、队列或日志将客户端参数化，同时支持请求操作的撤销与恢复“<br>”命令就是一个对象化（实例化）的方法调用&#x2F;面向对象化的回调“<br>前者是经典的《设计模式（GoF）》给的描述，相当晦涩难懂，后者是《游戏编程模式》一书的作者对此的精炼，比前者好很多了但听起来还是比较抽象。在网上查阅总结了一些<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38493448/article/details/123384853">文章</a>总结的不错：</p>
+<blockquote>
+<p>命令模式的本质是<font color ="red"><b>对命令进行封装</b></font>，将<font color ="red"><b>发出命令的责任</b></font>和<font color ="red"><b>执行命令的责任</b></font>分割开。让命令作为一个类，来进行调用，而不是命令仅仅只是一段可执行逻辑代码。命令模式的关键在于引入了抽象命令接口，且发送者针对抽象命令接口编程，只有实现了抽象命令接口的具体命令才能与接收者相关联。（实现动态绑定）命令作为一个对象以后就可以和其他对象一样进行保存、传递、转移等等。</p>
+</blockquote>
+<h2 id="引入命令模式"><a href="#引入命令模式" class="headerlink" title="引入命令模式"></a>引入命令模式</h2><p>每个游戏都有一处代码块用来读取用户输入：按钮点击、键盘事件、鼠标点击等。在这段代码中我们记录每次的输入并将之转换成游戏中一个有意义的动作，如下图所示：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/command-buttons-one.png">).<br>下面是这段处理的一个简单实现，也是我之前经常使用的实现方式：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (isPressed(BUTTON_X)) jump();</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (isPressed(BUTTON_Y)) Move();</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (isPressed(BUTTON_A)) Fire();</span><br></pre></td></tr></table></figure>
+<p>这段代码简单而有效，但是许多游戏允许用户配置自定义按钮与游戏行为之间的映射关系，这时上面的代码就显得有点僵硬。<br>怎么办呢？为了支持自定义配置，我们需要将对jump()等方法的直接调用转换为可更换的内容，这就用到了面向对象中的多态思想。<br>定义一个基类来代表一个可触发的游戏命令，然后为每个不同的游戏行为创建子类：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Command</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Command</span>()</span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">Execute</span>()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MoveCommand</span>&#123;</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Execute</span>()</span></span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FireCommand</span>&#123;</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Execute</span>()</span></span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后再输入管理类中（诸如InputManager），为每个按钮存储一个指向它的指针：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Command commandX;</span><br><span class="line"><span class="keyword">private</span> Command commandY;</span><br><span class="line"><span class="keyword">private</span> Command commandA;</span><br><span class="line"><span class="keyword">private</span> Command commandB;</span><br><span class="line">......</span><br><span class="line">commandX = <span class="keyword">new</span> MoveCommand();</span><br><span class="line">commandY = <span class="keyword">new</span> FireCommand();</span><br><span class="line">......</span><br><span class="line"><span class="keyword">if</span> (isPressed(BUTTON_X)) commandX.Execute();</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (isPressed(BUTTON_Y)) commandY.Execute();</span><br></pre></td></tr></table></figure>
+<p>以前的输入指令会直接调用方法，现在增加了一个中间调用层，用图（出自《游戏编程模式》）来直观表示就是：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/command-buttons-two.png"></p>
+<h2 id="更多命令模式"><a href="#更多命令模式" class="headerlink" title="更多命令模式"></a>更多命令模式</h2><h3 id="扩展角色"><a href="#扩展角色" class="headerlink" title="扩展角色"></a>扩展角色</h3><p>上面的例子其实有一个默认假设，就是Move()、jump()等命令是作用于玩家角色，而命令模式其实可以放宽限制，控制任何传递的角色对象。让我们先进一步完善上面的Command类：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Command</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">protected</span> IEntity _entity;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Command</span>(<span class="params">IEntity entity</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		_entity = entity;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">Execute</span>()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//发出命令</span></span><br><span class="line">_commandProcessor.ExecuteCommand(<span class="keyword">new</span> MoveToCommand(<span class="keyword">this</span>, position.Value));</span><br></pre></td></tr></table></figure>
+<p>命令的接收者（_entity）保存在类中，需要构造时传入特定的接收者。这样的好处是，我们的命令对象不仅可以响应玩家的输入，而是可以根据传入的对象，控制任意一个需要被控制的对象，AI 也可以简单地提供命令对象来执行。</p>
+<h3 id="撤销和重做"><a href="#撤销和重做" class="headerlink" title="撤销和重做"></a>撤销和重做</h3><p>命令模式的一个成名应用就是撤销和重做。撤销命令这个行为在策略游戏中经常见到，在游戏中可以回滚一些不满意的步骤。而在现在许多编辑软件里都会有撤销命令Ctrl+Z，游戏中的<strong>UI编辑器</strong>或者<strong>关卡编辑器</strong>里也会经常用到。<br>如果一个命令可以做（Do&#x2F;Execute）一些事情，那么就应该可以撤销（Undo）。我们可以保存一个命令列表和一个指向当前命令的下标：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> List&lt;Command&gt; _commands = <span class="keyword">new</span> List&lt;Command&gt;();</span><br><span class="line"><span class="keyword">private</span> <span class="built_in">int</span> _currentCommandIndex;</span><br></pre></td></tr></table></figure>
+<p>在执行一个命令的同时将其添加到列表里，并将_currentCommandIndex指向它：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ExecuteCommand</span>(<span class="params">Command command</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	_commands.Add(command);</span><br><span class="line">	command.Execute();</span><br><span class="line">	_currentCommandIndex = _commands.Count - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是撤销命令，先执行当前命令中的Undo方法，然后将该命令移除出列表（如果还有重做需求就不移除），最后当前下标向前移一个：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Undo</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (_currentCommandIndex &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	_commands[_currentCommandIndex].Undo();</span><br><span class="line">	_commands.RemoveAt(_currentCommandIndex);</span><br><span class="line">	_currentCommandIndex--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是重做命令，那么把当前列表的current指向下一个命令，重新执行。如果回退以后重新进行一个命令，那么把当前列表的当前命令之后所有命令都舍弃。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/01/11/Unity-Tips/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
