@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>HTML+CSS快速复习 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Frame.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+        </div>
+        <div class="post-title">
+            
+            
+                HTML+CSS快速复习
+            
+            
+        </div>
+        <span class="post-date">
+            Feb 17, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>最近通过一个视频教程快速复习一下HTML：</p>
+<ul>
+<li><p>&lt;header&gt;标签通常包含一些介绍性或导航用的信息</p>
+</li>
+<li><p>&lt;h1&gt;&lt;h2&gt;…&lt;h8&gt;等tag用于写标题，其中&lt;h1&gt;tag中的内容会被各种搜索引擎在计算关联度时使用，所以如果想让自己的网页被更多人检索到，你需要有一个&lt;h1&gt;tag，并且里面的内容很重要</p>
+</li>
+<li><p>一个以前不知道的小知识点——<strong>Lorem Ipsum</strong>，也称乱数假文或者哑元文本， 是印刷及排版领域（也包括电子排版）所常用的虚拟文字。如今使用它的目的简单来说就是为了保持字母多多少少标准及平均的分配，而不是“此处有文本，此处有文本”，从而让内容更像可读的英语</p>
+</li>
+<li><p>id属性是唯一的，不能有多个元素的id相同，而class没有这个限制，即允许不同的元素具有相同的class。此外class还可以并列存在，例如<code>class = &quot;grouped newClass&quot;</code></p>
+</li>
+<li><p>HTML本身与样式无关（极少数例外比如h1h2等等不同标题大小），它只与网页的结构和内容相关，样式全部交由CSS负责</p>
+</li>
+<li><p>CSS有多种方式设定要设置样式的元素集合。第一种是通过tag，例如</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">header</span>&#123;</span><br><span class="line">  <span class="attribute">color</span>: maroon;</span><br><span class="line">  <span class="attribute">background-color</span>: wheat;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二种是通过id，例如</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#top</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三种是class，例如</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grouped&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>@media。@media CSS 规则可用于根据一个或多个媒体查询的结果应用部分样式表。@media 可以针对不同的屏幕尺寸设置不同的样式，特别是如果需要设计响应式的页面，@media 是非常有用的。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">max-width</span>:<span class="number">700px</span>)&#123;</span><br><span class="line">  <span class="selector-id">#navigationBar</span>&#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面一段代码的意思是，当显示设备宽度在700以下时，将id为navigationBar的元素的position属性更改为relative，否则不变</p>
+</li>
+<li><p>某些老式浏览器并没有更新对部分HTML和CSS的新特性的支持，所以如果你的网站受众中有相当比例是通过老浏览器来访问的，请务必添加Backup方案，例如：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.reading</span>&#123;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5%</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;   //新特性</span><br><span class="line">  <span class="attribute">display</span>: -ms-flexbox;   //Backup方案，在IE10中应用</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/02/17/Container-Stack-Queue/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
