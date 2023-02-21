@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>Singleton Pattern | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/Game-Programming-Pattern/">
+                            Game Programming Pattern
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Singleton Pattern
+            
+            
+        </div>
+        <span class="post-date">
+            Feb 21, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>单例模式可能是我最熟悉的设计模式，各种管理类，日志记录类等都能看到它的大量使用。但其实单例模式往往弊大于利——然而当它被应用在游戏开发中时这一点往往被忽略了。</p>
+<h2 id="回顾单例模式"><a href="#回顾单例模式" class="headerlink" title="回顾单例模式"></a>回顾单例模式</h2><p>之前我们为什么大量使用单例？《GoF》一书中对其如此描述：</p>
+<blockquote>
+<p>“确保一个类只有一个实例， 并为其提供一个全局访问入口。”  </p>
+</blockquote>
+<p>这句话的前半句说出了第一个原因：<font color ="red"><b>确保一个类只有一个实例。</b></font><br>有些情况一个类如果有多个实例就不能正常运作，最常见的就是这个类与一个维持着自身全局状态的外部系统进行交互的情况，比如操作文件类。而单例则提供了在编译器就能确保某个类只有一个实例的方法。<br>这句话的后半句说出了另一个原因：<font color ="red"><b>方便的全局访问入口。</b></font><br>日志记录、游戏存储和文件加载等文件系统封装类在游戏的许多不同系统都会用到，那么如何获取它呢？将它四处传递？单例模式为此提供了解决方法：它不光创建了一个唯一实例，还提供一个全局方法是任何模块在任何地方都能方便获取该实例。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FileSystem</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> FileSystem instance;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="title">FileSystem</span>()</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> FileSystem Instance</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="keyword">get</span> </span><br><span class="line">      &#123;</span><br><span class="line">         <span class="keyword">if</span> (instance == <span class="literal">null</span>)</span><br><span class="line">         &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> FileSystem();</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> instance;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是单例的一个简单实现。instance这个静态成员保存着一个实例，而私有的构造函数也确保它是唯一的。公有的静态方法instance()提供了一个全局访问入口。它也负责在第一次访问的时候初始化这个类的实例，即延迟初始化（lazy initialization）。</p>
+<p>单例的优点除了以上《GoF》给出的定义中包含的两个，还有：</p>
+<ul>
+<li>不使用就不创建实例。节省内存和CPU周期始终都是有价值的。</li>
+<li>延迟初始化。静态类作为单例常见的替代方案有一个局限——自动初始化。编译器很早就优先初始化静态数据。这使得它们不能利用那些只有游戏运行起来才能知道的信息（比如文件中载入的配置）。还有它们不能相互依赖——编译器不能保证它们之间初始化的顺序。<br>而延迟初始化解决了这些问题，它能保证初始化时需要的信息都应该可以得到。</li>
+<li>可以继承。假设我们需要让文件封装类跨平台，可以将单例实现为一个抽象接口，由其子类提供各个平台上的实现。<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Singleton</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="title">Singleton</span>&lt;<span class="title">T</span>&gt;, <span class="title">new</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> T instance;</span><br><span class="line">		<span class="function"><span class="keyword">private</span> <span class="title">T</span>()</span>&#123;&#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> T Instance</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">get</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="literal">null</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> T();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> instance;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用时需要运用单例模式的C#类直接继承Singleton即可</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test</span> : <span class="title">Singleton</span>&lt;<span class="title">Test</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="单例模式的使用代价"><a href="#单例模式的使用代价" class="headerlink" title="单例模式的使用代价"></a>单例模式的使用代价</h2><ol>
+<li><p><font size=4>全局变量带来的麻烦</font></p>
+<ul>
+<li>降低代码可读性。</li>
+<li>促进了耦合。</li>
+<li>对并发不友好。当设置全局变量时，我们创建了一段内存，每个线程都能访问和修改它而不管它们是否知道其他线程正在操作它，这样有可能导致死锁、等其他线程同步的bug。</li>
+</ul>
+</li>
+<li><p><font size=4>看似便利实则“画蛇添足”的全局访问？</font><br>比如，将日志记录类变成单例可以使我们在任何地方都能访问利用它来打印日志了，但突然之间，我们不能够创建多个日志器了——随着开发周期的深入，我们很可能会希望将日志分割为不同的文件，对游戏不同的区域创建单独的日志器：UI、音频、在线网络等等。</p>
+</li>
+<li><p><font size=4>延迟初始化的副作用</font><br>延迟初始化对于满足游戏在虚拟内存和软件性能上的需求是一个聪明的技巧。但有时又显得不适用：比如实例化音频系统需要花费几百毫秒，如果我们让它在第一次播放声音时延迟实例化，那么此时的初始化可能导致明显的游戏卡顿。<br>另一方面，游戏通常需要仔细地控制内存在堆中的布局来防止碎片化。如果我们的音频系统在初始化时分配了内存，我们需要知道初始化发生的时间以便控制它在堆中的布局。</p>
+</li>
+</ol>
+<h2 id="该怎么正确使用单例"><a href="#该怎么正确使用单例" class="headerlink" title="该怎么正确使用单例"></a>该怎么正确使用单例</h2><p>《游戏编程模式》从单例的优点出发，来找单例模式的替代方案：</p>
+<ul>
+<li>有时我们会无脑的添加太多的“Manager”，有时没有管理器也没有问题，只需将它的功能移到它所帮助管理的类中就可以了。</li>
+<li>单例模式给你解决的一个问题之一就是“将类限制为单一实例”。但我们又不想提供这个实例的全局访问怎么办？有几种方法比如下面这种：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FileSystem</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">	  <span class="built_in">FileSystem</span>()</span><br><span class="line">	  &#123;</span><br><span class="line">	    <span class="built_in">assert</span>(!instantiated_);</span><br><span class="line">	    instantiated_ = <span class="literal">true</span>;</span><br><span class="line">	  &#125;</span><br><span class="line">	</span><br><span class="line">	  ~<span class="built_in">FileSystem</span>() &#123; instantiated_ = <span class="literal">false</span>; &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">	  <span class="type">static</span> <span class="type">bool</span> instantiated_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+ 这个类在你想创建超过一个实例时会断言失败。<br> 不过这种实现的不足之处在于它只在运行时检测来防止多个实例，而单例模式在编译器就能通过类结果特性来确保单个实例。</li>
+<li>便利的访问方式也是我们使用单例的主要原因。那么看看要想访问一个对象还有哪些途径吧：<ol>
+<li>传递进去。这是最简单的方式。比如一个渲染API需要访问代表图形设备的对象并维护渲染状态。简单将其传递到所有的渲染函数中是很常见的做法（通常函数中的这个参数叫context）。</li>
+<li>在基类中获取。一个处理AI的函数可能也需要记录日志，但这件事并不是它主要关心的，所以将Log对象直接传递进去会很奇怪。这时候可以将记录日志的对象写在基类中： <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">GameObject</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">protected</span>:</span><br><span class="line">	  <span class="function">Log&amp; <span class="title">getLog</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> log_; &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">	  <span class="type">static</span> Log&amp; log_;</span><br><span class="line">&#125;;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Enemy</span> : <span class="keyword">public</span> GameObject</span><br><span class="line">&#123;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">doSomething</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">	<span class="built_in">getLog</span>().<span class="built_in">write</span>(<span class="string">&quot;I can log!&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+ 这保证了除了GameObject及其子类之外，其他地方都不能访问Log对象。（子类沙盒模式）</li>
+<li>通过其他全局对象访问。通常游戏中会有一个单独代表整个游戏状态的Game或World全局对象。我们可以：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Game</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">	  <span class="function"><span class="type">static</span> Game&amp; <span class="title">instance</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> instance_; &#125;</span><br><span class="line">	</span><br><span class="line">	  <span class="comment">// Functions to set log_, et. al. ...</span></span><br><span class="line">	</span><br><span class="line">	  <span class="function">Log&amp;         <span class="title">getLog</span><span class="params">()</span>         </span>&#123; <span class="keyword">return</span> *log_; &#125;</span><br><span class="line">	  <span class="function">FileSystem&amp;  <span class="title">getFileSystem</span><span class="params">()</span>  </span>&#123; <span class="keyword">return</span> *fileSystem_; &#125;</span><br><span class="line">	  <span class="function">AudioPlayer&amp; <span class="title">getAudioPlayer</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> *audioPlayer_; &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">	  <span class="type">static</span> Game instance_;</span><br><span class="line">	</span><br><span class="line">	  Log         *log_;</span><br><span class="line">	  FileSystem  *fileSystem_;</span><br><span class="line">	  AudioPlayer *audioPlayer_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+ 只有Game是全局可见，通过它来访问其他系统：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Game::<span class="built_in">instance</span>().<span class="built_in">getAudioPlayer</span>().<span class="built_in">play</span>(VERY_LOUD_BANG);</span><br></pre></td></tr></table></figure>
+ 这样做的副作用就是更多的代码耦合在了Game当中。</li>
+</ol>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>单例模式便利归便利，它的很多缺点也是让人无法忽视，在决定使用它之前尽量考虑周全。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/02/17/HTML-CSS%E5%BF%AB%E9%80%9F%E5%A4%8D%E4%B9%A0/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
