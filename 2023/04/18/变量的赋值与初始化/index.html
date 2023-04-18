@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>变量的赋值与初始化 | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C/">
+                            C++
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                变量的赋值与初始化
+            
+            
+        </div>
+        <span class="post-date">
+            Apr 18, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h3 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h3><p>变量的赋值很简单，与赋值运算符 &#x3D; 密切相关</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> width; <span class="comment">// define an integer variable named width</span></span><br><span class="line">width = <span class="number">5</span>; <span class="comment">// copy assignment of value 5 into variable width</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// variable width now has value 5</span></span><br></pre></td></tr></table></figure>
+<p>这个过程就叫做赋值，因为是把赋值运算符右边的值复制到左边的变量中，所以也叫拷贝赋值。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>变量的赋值和变量的初始化是分开的两个语句，那把它们合二为一会怎么样？这就是变量的初始化。<br>初始化相比赋值来说情况就复杂得多了。<br>可以分为下面6种情况：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a;         <span class="comment">// no initializer (default initialization)</span></span><br><span class="line"><span class="type">int</span> b = <span class="number">5</span>;     <span class="comment">// initializer after equals sign (copy initialization)</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">c</span><span class="params">( <span class="number">6</span> )</span></span>;    <span class="comment">// initializer in parenthesis (direct initialization)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// List initialization methods (C++11)</span></span><br><span class="line"><span class="type">int</span> d &#123; <span class="number">7</span> &#125;;   <span class="comment">// initializer in braces (direct list initialization)</span></span><br><span class="line"><span class="type">int</span> e = &#123; <span class="number">8</span> &#125;; <span class="comment">// initializer in braces after equals sign (copy list initialization)</span></span><br><span class="line"><span class="type">int</span> f &#123;&#125;;      <span class="comment">// initializer is empty braces (value initialization)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一个显然是默认初始化，没有提供任何值。大部分时候默认初始化会给变量一个模糊值（或者叫不确定值）。</p>
+</li>
+<li><p>第二个是复制初始化（copy assignment），目前在现代C++里已经鲜少使用这种方法初始化，一般出现的场合在隐式复制值时，例如按值向函数传递参数、按值从函数返回或按值捕获异常时。</p>
+</li>
+<li><p>第三种，直接初始化，使用一对括号。这种初始化方法最初引入是为了方便复杂类型的初始化，然而，和复制初始化一样，在现代C++中也很少被使用，比如当值显式转换为另一种类型时。直接初始化已经失宠的原因之一是它使得很难区分变量和函数。例如：</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">x</span><span class="params">()</span></span>;  <span class="comment">// forward declaration of function x</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">x</span><span class="params">(<span class="number">0</span>)</span></span>; <span class="comment">// definition of variable x with initializer 0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第四到第六都属于列表初始化，也是现代C++中常用的方法。<br>在引入列表初始化之前，某些类型的初始化需要使用复制初始化，而其他类型的初始化则需要使用直接初始化。引入列表初始化是为了提供更一致的初始化语法（这就是为什么它有时被称为“统一初始化”（uniform initialization））。<br>列表初始化还有一个额外的好处：它不允许“<font color = red>收缩转换</color>”。这意味着，如果试图使用变量无法安全保存的值来对变量进行大括号初始化，编译器将产生错误。例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> width &#123; <span class="number">4.5</span> &#125;; <span class="comment">// error: a number with a fractional value can&#x27;t fit into an int</span></span><br></pre></td></tr></table></figure>
+<p>如上图，将浮点数4.5分配给一个整数变量，如果是复制初始化或直接初始化，则会直接将小数部分去掉后的整数4赋值给变量width，因此数据丢失在所难免；而对于列表初始化，编译器将报错，强迫我们去解决这个问题。</p>
+</li>
+<li><p>当用{ }初始化变量时，将进行值初始化（value initialization）。在大多数情况下，值初始化会将变量初始化为零（如果更适合给定类型，则为空）。在这种发生归零的情况下，这被称为零初始化（zero initialization）。<br>那么，什么时候将变量显式初始化为0（int x &#x3D; {0}）, 什么时候应该用值初始化（int x &#x3D; { }）？<br>答案是如果我们将要使用该变量，则对其显式初始化为0，否则用值初始化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x &#123; <span class="number">0</span> &#125;;    <span class="comment">// explicit initialization to value 0</span></span><br><span class="line">std::cout &lt;&lt; x; <span class="comment">// we&#x27;re using that zero value</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> x &#123;&#125;;      <span class="comment">// value initialization</span></span><br><span class="line">std::cin &gt;&gt; x; <span class="comment">// we&#x27;re immediately replacing that value</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="使用建议"><a href="#使用建议" class="headerlink" title="使用建议"></a>使用建议</h3><h5 id="尽量在创建后对变量就进行初始化"><a href="#尽量在创建后对变量就进行初始化" class="headerlink" title="尽量在创建后对变量就进行初始化"></a>尽量在创建后对变量就进行初始化</h5><p>如果试图使用一个没有定义好的值的变量，会发生什么？<br>如果是某些会在创建变量时自动初始化的语言，这没什么问题，因为变量创建后就会被赋予一个默认值（比如0），但是C++不会。所以变量的默认值可能会出人意料——因为当我们在C++中把变量分配给一块内存后，谁也不知道那块内存上之前的每一位都是什么！</p>
+<p>举个例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x; <span class="comment">// 未经初始化的变量x</span></span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// 谁也不知道打印结果会是什么</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的例子打印结果是随机的，也许上一次是4204829，下一次就是5427429。（有的编译器，比如Visaul Studio，如果你在使用debug构筑模式时会给未初始化的变量分配预设值，所以如果要进行上面的测试必须确保构筑设置为release）</p>
+<blockquote>
+<p>顺便一说，C++这种对初始化的缺省是继承自C语言。以前的计算机还很慢，给变量的赋值操作的开销在数量大到一定程度时对性能还是有不小的影响。对现在的计算机来说这点开销和这样做的好处相比已经不算什么了，所以现在都提倡创建变量后马上初始化。当然也不排除在某些特定情况下还是需要缺省初始化，但这个决定一定是经过思考与抉择后做出的！</p>
+</blockquote>
+<h5 id="未使用的初始化变量和-maybe-Unused"><a href="#未使用的初始化变量和-maybe-Unused" class="headerlink" title="未使用的初始化变量和[[maybe_Unused]]"></a>未使用的初始化变量和[[maybe_Unused]]</h5><p>如果变量被初始化但未被使用，现代编译器通常会生成警告（因为这是不可取的）。如果启用了“将警告视为错误”，这些警告将升级为错误，并导致编译失败。<br>比如下面这个看上去没啥大问题的程序：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x &#123; <span class="number">5</span> &#125;; <span class="comment">// variable defined</span></span><br><span class="line">    <span class="comment">// but not used anywhere</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解决办法有两个，一个是暂时设置编译器不将警告当错误处理，另一个方法是简单地直接在代码中某个地方使用这个变量。<br>在C++17中，最好的解决方案是使用[[maybe_unused]]属性。该属性告诉编译器可能不会使用该变量，因此不会生成“未使用的变量”警告。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/02/21/Singleton-Pattern/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
