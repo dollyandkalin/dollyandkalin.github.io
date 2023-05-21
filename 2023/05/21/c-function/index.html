@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>c++ function | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C/">
+                            C++
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                c++ function
+            
+            
+        </div>
+        <span class="post-date">
+            May 21, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h2><p>按顺序执行的语句集合，或者一个可重复使用的语句序列，旨在完成特定的工作。</p>
+<h2 id="2-函数返回值"><a href="#2-函数返回值" class="headerlink" title="2. 函数返回值"></a>2. 函数返回值</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">return-type identifier() // identifier replaced with the name of your function</span><br><span class="line">&#123;</span><br><span class="line">// Your code here</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数只能有单一返回值，不管是整型还是自定义类型；<br>不像其他语言比如C#，C++中不允许内嵌函数，比如像下面这段代码不能通过编译</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">return7</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">return9</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">9</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">return7</span>() + <span class="built_in">return9</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>函数可以复用，这一点可以用来最小化程序冗余。这也符合良好编程的核心原则之一：不要重复自己（Don’t Repeat Yourself，通常缩写为DRY）。</p>
+<blockquote>
+<p><strong>Tips</strong><br>如果您需要多次执行某些操作，请考虑如何修改代码以尽可能多地消除冗余。变量可以用于存储需要多次使用的计算结果（因此我们不必重复计算）。函数可以用来定义我们要多次执行的语句序列。循环（我们将在后面的章节中介绍）可以用于多次执行一个语句。</p>
+</blockquote>
+<h3 id="2-1-空返回值函数-Void-functions"><a href="#2-1-空返回值函数-Void-functions" class="headerlink" title="2.1 空返回值函数 (Void functions)"></a>2.1 空返回值函数 (Void functions)</h3><p>函数不需要将值返回给调用者。为了告诉编译器函数不返回值，使用了void的返回类型。不返回值的函数称为非值返回函数（或void函数）。</p>
+<p>void函数将在函数结束时自动返回给调用者。不需要返回语句。事实上，编译器将始终在其末尾生成return指令。<br>当然，返回语句（没有返回值）仍然可以在void函数中使用——这样的语句将导致函数在执行到此时返回给调用者。这一点其实用处很多，比如防御式编程：在不满足条件时提前返回，比if&#x2F;else的嵌套简洁太多，例如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MyFunc</span><span class="params">(Type i)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="keyword">if</span> (i == null)    <span class="comment">//early return</span></span><br><span class="line">        <span class="keyword">return</span>;  </span><br><span class="line">  </span><br><span class="line">    i.<span class="built_in">DoSomething</span>();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不能在需要值的表达式中使用Void函数，例如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="comment">// void means the function does not return a value to the caller</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printHi</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Hi&quot;</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printHi</span>(); <span class="comment">// okay: function printHi() is called, no value is returned</span></span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">printHi</span>(); <span class="comment">// compile error</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对printHi( ) 的第一个调用是在不需要值的上下文中调用的。由于函数不返回值，所以这是可以的。<br>但对printHi( ) 的第二个函数调用甚至不会编译。这里试图将printHi的返回值发送到std:：cout以进行打印。std:：cout不知道如何处理这个问题（它会输出什么值？）。因此，编译器会将其标记为错误。</p>
+<h2 id="3-生命周期与作用域"><a href="#3-生命周期与作用域" class="headerlink" title="3. 生命周期与作用域"></a>3. 生命周期与作用域</h2><h3 id="3-1-局部变量"><a href="#3-1-局部变量" class="headerlink" title="3.1 局部变量"></a>3.1 局部变量</h3><p>函数参数，以及函数体中定义的变量，称为局部变量（与之相对的是<font color = red>全局变量</font>）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> <span class="comment">// function parameters x and y are local variables</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> z&#123; x + y &#125;; <span class="comment">// z is a local variable too</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> z;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>局部变量的生命周期终止于它被定义的那个大括号的终点（大括号可以是函数，也可以是某个语法块），上面的例子中，当程序运行到最后一行，也就是反向大括号那里时，局部变量x, y, z都会被销毁。补充一点，一般情况下，创建与销毁的顺序是相反的。<br>因为变量的创建与销毁都是运行时发生的事情，所以生命周期是一个运行时属性。</p>
+<h3 id="3-2-局部作用域"><a href="#3-2-局部作用域" class="headerlink" title="3.2 局部作用域"></a>3.2 局部作用域</h3><p>标识符的作用域决定了在源代码中可以看到和使用标识符的位置。当一个标识符可以被看到和使用时，我们说它在作用域中（in scope）。当一个标识符看不到时，我们就不能使用它，我们说它超出了范围（out of scope）。作用域是一个编译时属性，当标识符不在作用域中时尝试使用它将导致编译错误。</p>
+<p>局部变量的作用域始于变量定义点，止于定义局部变量的花括号集的末尾（对于函数参数，则止于函数的末尾）。这确保了变量不能在定义点之前使用（即使编译器选择在此之前创建它们）。在一个函数中定义的局部变量也不在被调用的其他函数的作用域中。</p>
+<h3 id="3-3-功能分离（functional-separation）"><a href="#3-3-功能分离（functional-separation）" class="headerlink" title="3.3 功能分离（functional separation）"></a>3.3 功能分离（functional separation）</h3><p>先看下面一个例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> <span class="comment">// add&#x27;s x and y are created and enter scope here</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// add&#x27;s x and y are visible/usable within this function only</span></span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125; <span class="comment">// add&#x27;s y and x go out of scope and are destroyed here</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x&#123; <span class="number">5</span> &#125;; <span class="comment">// main&#x27;s x is created, initialized, and enters scope here</span></span><br><span class="line">    <span class="type">int</span> y&#123; <span class="number">6</span> &#125;; <span class="comment">// main&#x27;s y is created, initialized, and enters scope here</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// main&#x27;s x and y are usable within this function only</span></span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">add</span>(x, y) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// calls function add() with x=5 and y=6</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; <span class="comment">// main&#x27;s y and x go out of scope and are destroyed here</span></span><br></pre></td></tr></table></figure>
+<p>方法main和add中都有变量名为x和y，然而这并不影响编译。因为当在函数main内部时，名称x和y指的是main的局部作用域变量x和y。这些变量只能在main内部看到（和使用）。类似地，当在函数add内部时，名称x和y指的是函数参数x和y，它们只能在add内部看到（和使用）。</p>
+<blockquote>
+<p>在函数体中声明的函数参数或变量的名称仅在声明它们的函数中可见。这意味着在命名函数中的局部变量时不用考虑其他函数中变量的名称。这有助于保持功能的独立性。</p>
+</blockquote>
+<h3 id="3-4-前置声明和定义（forward-declarations-and-definitions）"><a href="#3-4-前置声明和定义（forward-declarations-and-definitions）" class="headerlink" title="3.4 前置声明和定义（forward declarations and definitions）"></a>3.4 前置声明和定义（forward declarations and definitions）</h3><p>先看这样一段代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;The sum of 3 and 4 is: &quot;</span> &lt;&lt; <span class="built_in">add</span>(<span class="number">3</span>, <span class="number">4</span>) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>乍一看好像没啥问题，事实上会报错：add.cpp(5) : error C3861: ‘add’: identifier not found。<br>这个程序不编译的原因是编译器按顺序编译代码文件的内容。当编译器在main的第5行到达函数调用add时，它不知道add是什么，因为我们对add的定义在后面！</p>
+<p>那么怎么解决呢，一个最简单直接的办法，改变函数定义的顺序，把add函数块放到main的前面。这种做法在代码比较简单时没问题，但有三个很大的问题：</p>
+<ul>
+<li>函数数量多起来后，调整组织函数之间的顺序就成了一个麻烦的事情；</li>
+<li>无法解决函数间有互相调用的情况；</li>
+<li>只适用于在同一个代码文件中；</li>
+</ul>
+<p>所以就有了前置声明，它允许我们在实际定义标识符之前告诉编译器标识符的存在。<br>这允许我们在定义函数体之前告诉编译器函数的存在。这样，当编译器遇到对函数的调用时，它会理解我们正在试图调用哪个函数，并可以通过声明检查调用的正确性，即使它还不知道函数是如何定义的或在哪里定义的。<br>一个典型的前置声明长这样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>也可以不确定参数名：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>当然一般从代码可读性考虑还是推荐保留参数名</p>
+<h3 id="3-5-一个定义原则-ODR"><a href="#3-5-一个定义原则-ODR" class="headerlink" title="3.5 一个定义原则 (ODR)"></a>3.5 一个定义原则 (ODR)</h3><p>一个定义规则（简称ODR）是C++中众所周知的规则。ODR由三部分组成：</p>
+<ol>
+<li><p>在给定的文件中，函数、变量、类型或模板只能有一个定义。</p>
+</li>
+<li><p>在一个给定的程序中，一个变量或普通函数只能有一个定义。之所以有这种区别，是因为程序可以有多个文件（我们将在下一课中介绍这一点）。</p>
+</li>
+<li><p>允许类型、模板、内联函数和内联变量在不同的文件中具有相同的定义。我们还没有涵盖其中的大部分内容，所以现在不要担心——我们会在相关的时候再提出来。</p>
+</li>
+</ol>
+<p>违反ODR的第1条将导致编译器发出重新定义错误。违反ODR第2条可能会导致链接器发出重新定义错误。违反ODR第3条将导致未定义的行为。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/04/18/%E5%8F%98%E9%87%8F%E7%9A%84%E8%B5%8B%E5%80%BC%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
