@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>Fundamental-Types | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C/">
+                            C++
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Fundamental-Types
+            
+            
+        </div>
+        <span class="post-date">
+            Jul 11, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>基础数据类型（Fundamental Types，下面以基础类型简称之）是所有复杂类型&#x2F;结构的基本构建模块与基石。值得注意的一点是，基础类型是没有默认初始化的，也就是说如果这样声明一个基础类型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> k;</span><br><span class="line">cout &lt;&lt; k &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>打印结果可能为任意值，因为k并没有被初始化（因为C++奉行”you only pay for what you use“）；<br>as aside: integer and integral</p>
+<h2 id="布尔逻辑（Boolean-Logic）"><a href="#布尔逻辑（Boolean-Logic）" class="headerlink" title="布尔逻辑（Boolean Logic）"></a>布尔逻辑（Boolean Logic）</h2><h4 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> a = <span class="literal">true</span>;</span><br><span class="line"><span class="type">bool</span> b = <span class="literal">false</span>;</span><br><span class="line"><span class="type">bool</span> c = a &amp;&amp; b;   <span class="comment">// false    logical AND</span></span><br><span class="line"><span class="type">bool</span> d = a || b;   <span class="comment">// true     logical OR</span></span><br><span class="line"><span class="type">bool</span> e = !a;       <span class="comment">// false    logical NOT</span></span><br><span class="line">Alternative Spellings:</span><br><span class="line"><span class="type">bool</span> x = a <span class="keyword">and</span> b;  <span class="comment">// false</span></span><br><span class="line"><span class="type">bool</span> y = a <span class="keyword">or</span> b;   <span class="comment">// true</span></span><br><span class="line"><span class="type">bool</span> z = <span class="keyword">not</span> a;    <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="转换关系"><a href="#转换关系" class="headerlink" title="转换关系"></a>转换关系</h4><pre><code>0总是false, 其他所有非0值都是true
+</code></pre>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> f = <span class="number">12</span>;   <span class="comment">// true   (int → bool)</span></span><br><span class="line"><span class="type">bool</span> g = <span class="number">0</span>;    <span class="comment">// false  (int → bool)</span></span><br><span class="line"><span class="type">bool</span> h = <span class="number">1.2</span>;  <span class="comment">// true   (double → bool)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="短路求值"><a href="#短路求值" class="headerlink" title="短路求值"></a>短路求值</h4><p>如果在计算第一个操作数后结果已知，则不计算布尔比较的第二个操作数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">2</span>;  </span><br><span class="line"><span class="type">int</span> k = <span class="number">8</span>;</span><br><span class="line"><span class="type">bool</span> b1 = (i &gt; <span class="number">0</span>) || (k &lt; <span class="number">3</span>);  <span class="comment">//左边的操作数i&gt;0计算为true，OR运算符结果必然为true，所以右边的k&lt;3不会被计算</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="基本类型的内存大小"><a href="#基本类型的内存大小" class="headerlink" title="基本类型的内存大小"></a>基本类型的内存大小</h2><p>所有类型大小都是sizeof（char）的倍数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">char</span>);   <span class="comment">// 1</span></span><br><span class="line">cout &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">bool</span>);   <span class="comment">// 1</span></span><br><span class="line">cout &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">short</span>);  <span class="comment">// 2</span></span><br><span class="line">cout &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">int</span>);    <span class="comment">// 4</span></span><br><span class="line">cout &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">long</span>);   <span class="comment">// 8</span></span><br><span class="line"><span class="comment">// number of bits in a char</span></span><br><span class="line">cout &lt;&lt; CHAR_BIT;   <span class="comment">// 8</span></span><br><span class="line"><span class="type">char</span>   c = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line"><span class="type">bool</span>   b = <span class="literal">true</span>;</span><br><span class="line"><span class="type">int</span>    i = <span class="number">1234</span>;</span><br><span class="line"><span class="type">long</span>   l = <span class="number">12</span>;</span><br><span class="line"><span class="type">short</span>  s = <span class="number">8</span>;</span><br></pre></td></tr></table></figure>
+<p>上面举例的五个变量在内存中的形式如下图：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2023-07-09_180305.png"><br>内存大小和平台相关，比如long在64位系统和32位系统中的长度就不同。只有一些基本关系在所有平台上都成立：</p>
+<ul>
+<li><code>sizeof(short)</code> ≥ <code>sizeof(char)</code></li>
+<li><code>sizeof(int)</code> ≥ <code>sizeof(short)</code></li>
+<li><code>sizeof(long)</code> ≥ <code>sizeof(int)</code></li>
+</ul>
+<h2 id="类型窄化"><a href="#类型窄化" class="headerlink" title="类型窄化"></a>类型窄化</h2><ul>
+<li>从可以表示更多值的类型转换为可以表示更少值的类型</li>
+<li>可能导致信息丢失</li>
+<li>一般情况下，编译器不会发出警告</li>
+<li>可能会产生不易察觉的运行时bug<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span>   d = <span class="number">1.23456</span>;</span><br><span class="line"><span class="type">float</span>    f = <span class="number">2.53f</span>;</span><br><span class="line"><span class="type">unsigned</span> u = <span class="number">120u</span>;</span><br><span class="line"><span class="type">double</span> e = f;  <span class="comment">// OK  float → double</span></span><br><span class="line"><span class="type">int</span> i = <span class="number">2.5</span>;   <span class="comment">// NARROWING double → int</span></span><br><span class="line"><span class="type">int</span> j = u;     <span class="comment">// NARROWING unsigned int → int</span></span><br><span class="line"><span class="type">int</span> k = f;     <span class="comment">// NARROWING float → int</span></span><br></pre></td></tr></table></figure>
+注意上面例子中unsigned int转换为int，int范围并不是完全被unsigned int包围，这个转换依然算是类型窄化。我个人推测是因为虽然int的取值范围和unsigned int部分重叠，但考虑正整数部分，有一部分数值在unsigned int中无法表示，只要出现这种情况就算类型窄化了。</li>
+</ul>
+<p>在C++11中，推出了大括号初始化（Braced Initialization）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type variable &#123; value &#125;;</span><br></pre></td></tr></table></figure>
+<p>这种初始化方式可用于所有基础类型，最重要的是，如果出现类型窄化会编译警告：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span>   d &#123;<span class="number">1.23456</span>&#125;;  <span class="comment">// OK</span></span><br><span class="line"><span class="type">float</span>    f &#123;<span class="number">2.53f</span>&#125;;    <span class="comment">// OK</span></span><br><span class="line"><span class="type">unsigned</span> u &#123;<span class="number">120u</span>&#125;;     <span class="comment">// OK</span></span><br><span class="line"><span class="type">double</span> e &#123;f&#125;;  <span class="comment">// OK float → double</span></span><br><span class="line"><span class="type">int</span> i &#123;<span class="number">2.5</span>&#125;;   <span class="comment">//  COMPILER WARNING: double       → int</span></span><br><span class="line"><span class="type">int</span> j &#123;u&#125;;     <span class="comment">//  COMPILER WARNING: unsigned int → int</span></span><br><span class="line"><span class="type">int</span> k &#123;f&#125;;     <span class="comment">//  COMPILER WARNING: float        → int</span></span><br></pre></td></tr></table></figure>
+<p>所以我们应该多利用这种初始化方式来避免代码中出现难以发现的类型窄化，以及可能由此而产生的bug!</p>
+<h2 id="按位运算"><a href="#按位运算" class="headerlink" title="按位运算"></a>按位运算</h2><h4 id="位逻辑"><a href="#位逻辑" class="headerlink" title="位逻辑"></a>位逻辑</h4><p><code>a &amp; b</code>     bitwise <font color = red>AND</font>  按位与<br><code>a | b</code>     bitwise <font color = red>OR</font>  按位或<br><code>a ^ b</code>     bitwise <font color = red>XOR</font>  按位异或<br><code>~a</code>          bitwise <font color = red>NOT</font> (one’s complement)  按位取反</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdint&gt;</span>                               <span class="comment">//memory bits:</span></span></span><br><span class="line">std::<span class="type">uint8_t</span> a = <span class="number">6</span>;                              <span class="comment">//0000 0110</span></span><br><span class="line">std::<span class="type">uint8_t</span> b = <span class="number">0b00001011</span>                      <span class="comment">//0000 1011</span></span><br><span class="line"></span><br><span class="line">std::<span class="type">uint8_t</span> c1 = (a &amp; b);  <span class="comment">// 2                 //0000 0010</span></span><br><span class="line">std::<span class="type">uint8_t</span> c2 = (a | b);  <span class="comment">// 15                //0000 1111</span></span><br><span class="line">std::<span class="type">uint8_t</span> c3 = (a ^ b);  <span class="comment">// 13                //0000 1101</span></span><br><span class="line">std::<span class="type">uint8_t</span> c4 = ~a;       <span class="comment">// 249               //1111 1001</span></span><br><span class="line">std::<span class="type">uint8_t</span> c5 = ~b;       <span class="comment">// 244               //1111 0100</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// test if int is even/odd:                      //result</span></span><br><span class="line"><span class="type">bool</span> a_odd  = a &amp; <span class="number">1</span>;                             <span class="comment">//0 ⇒ false</span></span><br><span class="line"><span class="type">bool</span> a_even = !(a &amp; <span class="number">1</span>);                          <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="逐位移位"><a href="#逐位移位" class="headerlink" title="逐位移位"></a>逐位移位</h4><p><code>x &lt;&lt; n</code>    returns <code>x</code>‘s value with its bits shifted by <code>n</code> places to the left<br><code>x &gt;&gt; n</code>    returns <code>x</code>‘s value with its bits shifted by <code>n</code> places to the right<br><code>x &lt;&lt;= n</code>    modifies <code>x</code> by shifting its bits by <code>n</code> places to the left<br><code>x &gt;&gt;= n</code>    modifies <code>x</code> by shifting its bits by <code>n</code> places to the right</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdint&gt;</span>                             <span class="comment">//memory bits:</span></span></span><br><span class="line">std::<span class="type">uint8_t</span> a = <span class="number">1</span>;                            <span class="comment">//0000 0001</span></span><br><span class="line">a &lt;&lt;= <span class="number">6</span>;  <span class="comment">// 64                                //0100 0000</span></span><br><span class="line">a &gt;&gt;= <span class="number">4</span>;  <span class="comment">// 4                                 //0000 0100</span></span><br><span class="line">std::<span class="type">uint8_t</span> b1 = (<span class="number">1</span> &lt;&lt; <span class="number">1</span>);  <span class="comment">// 2              //0000 0010</span></span><br><span class="line">std::<span class="type">uint8_t</span> b2 = (<span class="number">1</span> &lt;&lt; <span class="number">2</span>);  <span class="comment">// 4              //0000 0100</span></span><br><span class="line">std::<span class="type">uint8_t</span> b3 = (<span class="number">1</span> &lt;&lt; <span class="number">4</span>);  <span class="comment">// 16             //0001 0000</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：将大小为N位的类型的对象移位N或N位以上是未定义的行为！</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">std::<span class="type">uint32_t</span> i = <span class="number">1</span>;  <span class="comment">// 32 bit type</span></span><br><span class="line">i &lt;&lt;= <span class="number">32</span>;   UNDEFINED BEHAVIOR!</span><br><span class="line">std::<span class="type">uint64_t</span> j = <span class="number">1</span>;  <span class="comment">// 64 bit type</span></span><br><span class="line">j &lt;&lt;= <span class="number">70</span>;   UNDEFINED BEHAVIOR!</span><br></pre></td></tr></table></figure>
+
+<h2 id="Arithmetic-Conversions-amp-Promotions"><a href="#Arithmetic-Conversions-amp-Promotions" class="headerlink" title="Arithmetic Conversions &amp; Promotions"></a>Arithmetic Conversions &amp; Promotions</h2><p>有很多规则（可以追溯到C语言）的目的是为操作数和二进制运算的结果确定一个公共类型。<br>至少涉及一种浮点类型的运算：</p>
+<ul>
+<li><code>long double</code> ⊕ any other type → <code>long double</code></li>
+<li><code>double</code> ⊕ <code>float</code> → <code>double</code></li>
+<li><code>double</code> ⊕ <code>any integer</code> → <code>double</code></li>
+<li><code>float</code> ⊕ <code>any integer</code> → <code>float</code><br>两个整数类型的运算</li>
+</ul>
+<ol>
+<li>整数提升首先应用于两个操作数：<br>   基本上，所有小于int的值都被提升为int或unsaged int（取决于哪一个可以表示未提升类型的所有值）</li>
+<li>如果两种操作数类型不同，则应用整数转换：<br>   均为有符号数：较小类型转换为较大类型<br>   均位无符号数：较小类型转换为较大类型<br>   两者都有：<br>     1. 有符号转换为无符号，如果两者宽度相同<br>     2. 否则无符号转换为有符号，如果可以表示所有值<br>     3. 否则两者都转换为无符号</li>
+</ol>
+<h2 id="整数的一点补充"><a href="#整数的一点补充" class="headerlink" title="整数的一点补充"></a>整数的一点补充</h2><p>许多开发商（以及一些大型开发公司，如谷歌）认为，开发商通常应该避免使用无符号整数。<br>这在很大程度上是因为，对于带符号的值，意外溢出范围的顶部或底部需要做一些工作，因为这些值离0很远。对于无符号数字，溢出范围的底部要容易得多，因为范围的底部是0，这接近于我们大多数值的位置。</p>
+<p>考虑两个无符号数字的相减，例如2和3：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// int is 4 bytes</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> x&#123; <span class="number">2</span> &#125;;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> y&#123; <span class="number">3</span> &#125;;</span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; x - y &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// 2 - 3 = 4294967295</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们都知道结果应该是-1，但-1不能表示为无符号整数，所以我们得到溢出的结果4294967295。</p>
+<blockquote>
+<p>所以当需要保存或操作一个值（哪怕这个值应该非负）和数学运算方面，尽量使用符号数字。避免混用有符号和无符号数字。</p>
+</blockquote>
+<p>那么无符号数适合哪些场合？</p>
+<ul>
+<li>首先，在处理位操作时，无符号数字是首选。</li>
+<li>其次，在某些情况下，使用无符号数字仍然是不可避免的，主要是那些与数组索引有关的数字。毕竟数组索引非负。</li>
+<li>最后，嵌入式系统（例如Arduino）或其他处理器&#x2F;内存，出于性能原因，使用无符号数字更常见，也更容易被接受（在某些情况下，这是不可避免的）。</li>
+</ul>
+<h2 id="Void"><a href="#Void" class="headerlink" title="Void"></a>Void</h2><p>void的直接意思，也是最基本的意思就是“没有类型”！<br>它也是一个<font color = red>不完全类型</font>的例子。不完整类型是指包含的信息不足，编译器无法确定其大小的类型。因此，它们无法实例化，因此：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> value; <span class="comment">// won&#x27;t work, variables can&#x27;t be defined with incomplete type void</span></span><br></pre></td></tr></table></figure>
+
+<p>Void通常用于以下几种情况：</p>
+<ul>
+<li><p>用于指示函数不返回值</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="type">void</span> <span class="title">writeValue</span><span class="params">(<span class="type">int</span> x)</span> <span class="comment">// void here means no return value</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;The value of x is: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    <span class="comment">// no return statement, because this function doesn&#x27;t return a value</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不接受参数的函数（已过时的用法）。在C中，void被用作指示函数不接受任何参数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">getValue</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// void here means no parameters</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x&#123;&#125;;</span><br><span class="line">    std::cin &gt;&gt; x;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>尽管这段代码在C++中可以通过编译（出于向后兼容性的原因），但并不推荐。以下代码是等效并且在C++中是首选代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">getValue</span><span class="params">()</span> <span class="comment">// empty function parameters is an implicit void</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x&#123;&#125;;</span><br><span class="line">    std::cin &gt;&gt; x;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第三个用法更高级一点 —— void指针，这个在指针那一节再展开。</p>
+</li>
+</ul>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/05/21/c-function/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
