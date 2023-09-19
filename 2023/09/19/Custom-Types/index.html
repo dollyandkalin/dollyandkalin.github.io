@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>Custom Types | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/C/">
+                            C++
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Custom Types
+            
+            
+        </div>
+        <span class="post-date">
+            Sep 19, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>上一篇数据聚合中主要介绍的是简单聚合类型，这次是更复杂的自定义聚合类型</p>
+<h2 id="为什么需要使用自定义类型？"><a href="#为什么需要使用自定义类型？" class="headerlink" title="为什么需要使用自定义类型？"></a>为什么需要使用自定义类型？</h2><ul>
+<li>正确性保证<br>  不变性（invariants）。永远不会改变的行为和&#x2F;或数据属性<br>  通过控制&#x2F;限制对数据成员的访问来避免数据损坏<br>  使用专用类型限制函数的输入&#x2F;输出值</li>
+<li>可复用的抽象<br>  隐藏底层实现细节，不受内部实现变化影响的稳定接口<br>  常用服务的可重用抽象（例如，动态数组）</li>
+<li>资源管理<br>  也称为RAII（Resource Acquisition Is Initialization资源获取是初始化）<br>  构造对象时获取一些资源（内存、文件句柄、连接…）<br>  当对象被破坏时释放&#x2F;清理资源（取消分配内存、关闭连接等）</li>
+</ul>
+<p>单纯文字描述不太容易理解，下面是几个例子：</p>
+<ol>
+<li>一个单调递增计数器：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">monotonous_counter c;   </span><br><span class="line">cout &lt;&lt; c.<span class="built_in">reading</span>();  <span class="comment">// prints 0</span></span><br><span class="line">c.<span class="built_in">increment</span>();</span><br><span class="line">cout &lt;&lt; c.<span class="built_in">reading</span>();  <span class="comment">// prints 1</span></span><br><span class="line">c.<span class="built_in">increment</span>();</span><br><span class="line">c.<span class="built_in">increment</span>();</span><br><span class="line">cout &lt;&lt; c.<span class="built_in">reading</span>();  <span class="comment">// prints 3</span></span><br></pre></td></tr></table></figure>
+它具有以下性质：</li>
+</ol>
+<ul>
+<li>存储一个整数</li>
+<li>初始化为0</li>
+<li><b>不变性</b> —— 计数只能递增（不能减少或重置）</li>
+</ul>
+<p>如果换简单聚合类型，则无法保证这些性质：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">frail_counter</span> &#123;</span><br><span class="line">  <span class="type">int</span> count;</span><br><span class="line">&#125;;</span><br><span class="line">frail_counter c;    </span><br><span class="line">cout &lt;&lt; c.count; <span class="comment">// any value</span></span><br><span class="line">c.count++;</span><br><span class="line">c.count = <span class="number">11</span>;</span><br></pre></td></tr></table></figure>
+<p>首先，整型成员不能保证自动初始化0，然后该成员变量可以被任意修改——这个角度来看这里使用简单聚合类型和直接使用整型相比并无优势。</p>
+<ol start="2">
+<li>一个递增序列：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ascending_sequence s;   </span><br><span class="line">s.<span class="built_in">insert</span>(<span class="number">5</span>);           <span class="number">5</span></span><br><span class="line">s.<span class="built_in">insert</span>(<span class="number">-8</span>);          <span class="number">-85</span></span><br><span class="line">s.<span class="built_in">insert</span>(<span class="number">42</span>);          <span class="number">-8542</span></span><br><span class="line">cout &lt;&lt; s.<span class="built_in">size</span>();   <span class="comment">// prints 3</span></span><br><span class="line">cout &lt;&lt; s[<span class="number">0</span>];       <span class="comment">// prints -8</span></span><br><span class="line">cout &lt;&lt; s[<span class="number">2</span>];       <span class="comment">// prints 42</span></span><br></pre></td></tr></table></figure>
+它具有以下性质：</li>
+</ol>
+<ul>
+<li>可以存储整数</li>
+<li>不变性 —— 序列成员数量只能递增，不能减少，然后序列总是按升序排列</li>
+</ul>
+<p>同样的，简单聚合类型不能保证这些性质：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">chaotic_sequence</span> &#123;</span><br><span class="line">  std::vector&lt;<span class="type">int</span>&gt; nums;</span><br><span class="line">&#125;;</span><br><span class="line">chaotic_sequence s;     </span><br><span class="line">s.nums.<span class="built_in">push_back</span>(<span class="number">8</span>);   <span class="comment">//8</span></span><br><span class="line">s.nums.<span class="built_in">push_back</span>(<span class="number">1</span>);   <span class="comment">//81</span></span><br><span class="line">s.nums.<span class="built_in">push_back</span>(<span class="number">4</span>);   <span class="comment">//814</span></span><br><span class="line">s.nums.<span class="built_in">pop_back</span>(<span class="number">4</span>);    <span class="comment">//81 </span></span><br></pre></td></tr></table></figure>
+<pre><code>这里使用简单聚合类型chaotic_sequence和直接使用一个简单的std::vector相比也没有优势
+</code></pre>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>初始化一个自定义类型（Class）的成员有两种方式：成员初始化和构造函数初始化列表。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//成员初始化</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="type">int</span> i_ = <span class="number">10</span>;</span><br><span class="line">  <span class="type">double</span> x_ = <span class="number">3.14</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  …</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//构造函数初始化列表</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="type">int</span> i_;     <span class="comment">// 1st</span></span><br><span class="line">  <span class="type">double</span> x_;  <span class="comment">// 2nd</span></span><br><span class="line"><span class="keyword">public</span>:    </span><br><span class="line">  <span class="built_in">Foo</span>(): i_&#123;<span class="number">10</span>&#125;, x_&#123;<span class="number">3.14</span>&#125; &#123; &#125;</span><br><span class="line">  <span class="comment">// same order: i_ , x_ </span></span><br><span class="line">  …</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><font color="red">注意必须确保初始化列表中的成员顺序始终与成员声明顺序相同！否则会由此引发undefined behavior</font></p>
+<h2 id="关于构造函数"><a href="#关于构造函数" class="headerlink" title="关于构造函数"></a>关于构造函数</h2><p>构造函数即创建对象时执行的特殊成员函数。构造函数的函数名称就是类型名，它没有返回类型，可以通过初始化列表初始化数据成员，并且执行时机特殊，可以在里面加入需要在首次使用对象之前执行的代码。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Samples</span> &#123;</span><br><span class="line">  <span class="type">int</span> min_;</span><br><span class="line">  <span class="type">int</span> max_;</span><br><span class="line">  std::vector v_;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// 默认构造函数:</span></span><br><span class="line">  <span class="built_in">Samples</span> (): min_&#123;<span class="number">0</span>&#125;, max_&#123;<span class="number">1</span>&#125;, v_&#123;min_,max_&#125; &#123; v_.<span class="built_in">reserve</span>(<span class="number">8</span>); &#125;</span><br><span class="line">  <span class="keyword">explicit</span>  <span class="comment">// 自定义构造函数，前面加了explicit关键字:</span></span><br><span class="line">  <span class="built_in">Samples</span> (<span class="type">int</span> x): min_&#123;x&#125;, max_&#123;x&#125;, v_&#123;x&#125; &#123; v_.<span class="built_in">reserve</span>(<span class="number">8</span>); &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">add</span> <span class="params">(<span class="type">int</span> i)</span>  </span>&#123;   &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">min</span> <span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> min_; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">max</span> <span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> max_; &#125;</span><br><span class="line">  …</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>构造函数可以像上面那样在类里定义，也可以像其他成员函数那样分开定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyType</span> &#123; …</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">MyType</span> ();  <span class="comment">// 构造函数声明</span></span><br><span class="line">  …</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 分开定义</span></span><br><span class="line">MyType::<span class="built_in">MyType</span> (): … &#123; … &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="默认构造函数-VS-自定义构造函数"><a href="#默认构造函数-VS-自定义构造函数" class="headerlink" title="默认构造函数 VS 自定义构造函数"></a>默认构造函数 VS 自定义构造函数</h3><ul>
+<li>没有用户定义的构造函数 ⇒ 编译器生成一个默认的构造函数<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BoringType</span> &#123; <span class="keyword">public</span>: <span class="type">int</span> i = <span class="number">0</span>; &#125;;</span><br><span class="line">BoringType obj1;     <span class="comment">// </span></span><br><span class="line">BoringType obj2 &#123;&#125;;  <span class="comment">// </span></span><br></pre></td></tr></table></figure></li>
+<li>至少有一个用户定义的特殊构造函数 ⇒ 编译器不生成默认构造函数<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SomeType</span> &#123; …</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// special constructor:</span></span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">SomeType</span> <span class="params">(<span class="type">int</span> x)</span> … </span>&#123; … &#125;</span><br><span class="line">&#125;;</span><br><span class="line">SomeType s1 &#123;<span class="number">1</span>&#125;;  <span class="comment">//  special (int) constructor</span></span><br><span class="line">SomeType s2;      <span class="comment">//  COMPILER ERROR: no default constructor!</span></span><br><span class="line">SomeType s3 &#123;&#125;;   <span class="comment">//  COMPILER ERROR: no default constructor!</span></span><br></pre></td></tr></table></figure></li>
+<li>这样写默认构造函数<code>TypeName() = default;</code>⇒ 编译器生成默认构造函数<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyType</span> &#123; …</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">MyType</span> () = <span class="keyword">default</span>;</span><br><span class="line">  <span class="comment">// special constructor:</span></span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">MyType</span> <span class="params">(<span class="type">int</span> x)</span> … </span>&#123; … &#125;</span><br><span class="line">&#125;;</span><br><span class="line">MyType m1 &#123;<span class="number">1</span>&#125;;  <span class="comment">//  special (int) constructor</span></span><br><span class="line">MyType m2;      <span class="comment">// </span></span><br><span class="line">MyType m3 &#123;&#125;;   <span class="comment">// </span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>**如果使用&#x3D; default这种写法，不要忘了用成员初始化器初始化数据成员。</p>
+<h3 id="显式构造函数↔-隐含转换"><a href="#显式构造函数↔-隐含转换" class="headerlink" title="显式构造函数↔ 隐含转换"></a>显式构造函数↔ 隐含转换</h3><p>C++中有时会隐式地将参数类型转换为类类型，比如下面两个方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法参数类型是‘Counter’</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span> <span class="params">(Counter c)</span> </span>&#123; … &#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bar</span> <span class="params">(Counter <span class="type">const</span>&amp; c)</span> </span>&#123; … &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果Counter有一个接收一个int的构造函数并且这样写，就会发生隐式转换：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Counter</span> &#123;</span><br><span class="line">  <span class="type">int</span> count_ = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Counter</span> (<span class="type">int</span> initial):</span><br><span class="line">    count_&#123;initial&#125; &#123;&#125;</span><br><span class="line">  …</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">foo</span>(<span class="number">2</span>);           <span class="comment">// 隐式转换 &#x27;2&#x27; 为 &#x27;Counter&#x27;</span></span><br><span class="line"><span class="built_in">bar</span>(<span class="number">2</span>);           <span class="comment">// 隐式转换 &#x27;2&#x27; 为 &#x27;Counter&#x27;</span></span><br><span class="line"><span class="built_in">foo</span>(Counter&#123;<span class="number">2</span>&#125;);  <span class="comment">// </span></span><br><span class="line"><span class="built_in">bar</span>(Counter&#123;<span class="number">2</span>&#125;);  <span class="comment">// </span></span><br></pre></td></tr></table></figure>
+
+<p>但如果在构造函数前加上 <code>explicit</code> 关键字就能避免这种情况发生： </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Counter</span> &#123;</span><br><span class="line">  <span class="type">int</span> count_ = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="keyword">explicit</span></span></span><br><span class="line"><span class="function">  <span class="title">Counter</span> <span class="params">(<span class="type">int</span> initial)</span>:</span></span><br><span class="line"><span class="function">    count_&#123;</span>initial&#125; &#123;&#125;</span><br><span class="line">  …</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 没有适合的隐式转换，所以会编译错误: </span></span><br><span class="line"><span class="built_in">foo</span>(<span class="number">2</span>);  <span class="comment">//  COMPILER ERROR</span></span><br><span class="line"><span class="built_in">bar</span>(<span class="number">2</span>);  <span class="comment">//  COMPILER ERROR</span></span><br><span class="line"><span class="built_in">foo</span>(Counter&#123;<span class="number">2</span>&#125;);  <span class="comment">// </span></span><br><span class="line"><span class="built_in">bar</span>(Counter&#123;<span class="number">2</span>&#125;);  <span class="comment">// </span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Tips-默认情况下显式声明用户定义的构造函数"><a href="#Tips-默认情况下显式声明用户定义的构造函数" class="headerlink" title="Tips: 默认情况下显式声明用户定义的构造函数"></a>Tips: 默认情况下显式声明用户定义的构造函数</h5><p>因为隐式转换是一些难以发现的BUG的主要来源！只有在一定需要从参数类型进行直接隐式转换并且不会产生二义性，才使用非显式构造函数。</p>
+<h3 id="构造函数委托"><a href="#构造函数委托" class="headerlink" title="构造函数委托"></a>构造函数委托</h3><p>构造函数列表可以是其他的构造函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Range</span> &#123;</span><br><span class="line">  <span class="type">int</span> a_;</span><br><span class="line">  <span class="type">int</span> b_;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// 1) special constructor</span></span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">Range</span> <span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span>: a_&#123;</span>a&#125;, b_&#123;b&#125; &#123;</span><br><span class="line">    <span class="keyword">if</span> (b_ &gt; a_) std::<span class="built_in">swap</span>(a_,b_);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 2) special [a,a] constructor - delegates to [a,b] ctor</span></span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">Range</span> <span class="params">(<span class="type">int</span> a)</span>: Range&#123;</span>a,a&#125; &#123;&#125;</span><br><span class="line">  <span class="comment">// 3) default constructor - delegates to [a,a] ctor</span></span><br><span class="line">  <span class="built_in">Range</span> (): Range&#123;<span class="number">0</span>&#125; &#123;&#125;</span><br><span class="line">  …</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="一个语法上的限制"><a href="#一个语法上的限制" class="headerlink" title="一个语法上的限制"></a>一个语法上的限制</h3><p>由于C++语法中的歧义，无法使用空括号进行对象构造：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123; … &#125;;</span><br><span class="line"><span class="function">A <span class="title">a</span> <span class="params">()</span></span>;  <span class="comment">// 容易被当成对象创建，其实语法上是一个返回类型为&#x27;A&#x27;的函数&#x27;a&#x27;的声明</span></span><br><span class="line">A a;     <span class="comment">// 构建一个类型为&#x27;A&#x27;的对象</span></span><br><span class="line">A a &#123;&#125;;  <span class="comment">// 构建一个类型为&#x27;A&#x27;的对象</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="一些设计、编写上的建议"><a href="#一些设计、编写上的建议" class="headerlink" title="一些设计、编写上的建议"></a>一些设计、编写上的建议</h2><h5 id="整体建议"><a href="#整体建议" class="headerlink" title="整体建议"></a>整体建议</h5><ul>
+<li>每种类型都应该有一个目的 &#x2F; 只做一件事情</li>
+<li>保持数据成员的私有可见性 &#x2F; 使用成员函数访问 &#x2F; 修改数据</li>
+<li>对所有非写入函数加上const限定</li>
+</ul>
+<h5 id="接口中的类型别名"><a href="#接口中的类型别名" class="headerlink" title="接口中的类型别名"></a>接口中的类型别名</h5><ul>
+<li>如果带别名的类型仅用于私有成员函数或私有数据成员，请不要将类型别名公开</li>
+<li>只有当别名类型在类的公共接口中使用，比如用作公共成员函数的返回类型或参数，才可以使类型别名为公共类型。比如下面的例子：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdint&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;numeric_limits&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">monotonous_counter</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// public type alias</span></span><br><span class="line">  <span class="keyword">using</span> value_type = std::<span class="type">uint64_t</span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  value_type count_ = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function">value_type <span class="title">reading</span> <span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> count_; &#125;</span><br><span class="line">  …</span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">const</span> <span class="keyword">auto</span> max = std::numeric_limits&lt;monotonous_counter::value_type&gt;::<span class="built_in">max</span>();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="成员-vs-非成员"><a href="#成员-vs-非成员" class="headerlink" title="成员 vs 非成员"></a>成员 vs 非成员</h5><p>添加新功能 &#x2F; 新函数时，是实现为成员函数？还是独立在类之外的函数？（注：这种区别在C#中不存在，因为C#中的所有函数都属于某个类，区别只是是否静态）</p>
+<ul>
+<li>只需要访问公共数据（例如通过成员函数）⇒ 实现为独立函数</li>
+<li>需要访问私有数据⇒ 实现为成员函数<br>例子：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">gap</span> &#123;</span><br><span class="line">  <span class="type">int</span> a_; </span><br><span class="line">  <span class="type">int</span> b_;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">gap</span> <span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span>: a_&#123;</span>a&#125;, b_&#123;b&#125; &#123;&#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">a</span> <span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> a_; &#125;</span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">b</span> <span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> b_; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+实现一个函数，返回一个新的‘gap’类对象，其成员a与b与原来相比变化相同的数值。</li>
+</ul>
+<p>实现为独立函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">gap <span class="title">shifted</span> <span class="params">(gap <span class="type">const</span>&amp; g, <span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> gap&#123;g.<span class="built_in">a</span>()+x, g.<span class="built_in">b</span>()+x&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样写的好处是</p>
+<ul>
+<li>实现仅用到了gap的公共接口</li>
+<li>我们没有改变类型gap本身⇒ 其他依赖它的代码不需要重新编译。</li>
+</ul>
+<p>实现为成员函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">gap</span> &#123; </span><br><span class="line">  …</span><br><span class="line">  <span class="function">gap <span class="title">shifted</span> <span class="params">(<span class="type">int</span> x)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> gap&#123;a_+x, b_+x&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这种实现有如下缺点</p>
+<ul>
+<li>gap的其他使用者可能想要一个具有不同语义的shifted函数，但他们现在只能使用我们的</li>
+<li>依赖于gap的所有其他代码都需要重新编译</li>
+</ul>
+<h5 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h5><ul>
+<li><p>名称应反映类型&#x2F;函数的用途<br>可读性良好的例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">IPv6_Address</span> &#123;…&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ThreadPool</span> &#123;…&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">cuboid</span> &#123;…&#125;;</span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">volume</span> <span class="params">(cuboid <span class="type">const</span>&amp;)</span> </span>&#123;…&#125;</span><br></pre></td></tr></table></figure>
+<p>太笼统的例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Manager</span> &#123;…&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Starter</span> &#123;…&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Pool</span> &#123;…&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">get_number</span> <span class="params">(Pool <span class="type">const</span>&amp;)</span> </span>&#123;…&#125;</span><br></pre></td></tr></table></figure>
+<p>也是出于可读性的考虑，我们应该尽量避免使用Setter&#x2F;Getter的命名方式去给函数命名</p>
+</li>
+<li><p>命名类型和（成员）函数保持一致<br>  以下划线开头和&#x2F;或包含双下划线的名称保留给标准库和&#x2F;或编译器生成的实体。使用带前导下划线或双下划线的名称可能会调用未定义的行为！</p>
+</li>
+</ul>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/07/17/Data-Aggregates/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
