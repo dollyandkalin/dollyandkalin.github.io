@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>Unity音频模块 | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Unity音频模块
+            
+            
+        </div>
+        <span class="post-date">
+            Nov 7, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>音频模块作为游戏不可或缺的一个系统，处理难度不高，但也涉及了对象池，资源加载等方面。</p>
+<h2 id="Unity自带的声音工具"><a href="#Unity自带的声音工具" class="headerlink" title="Unity自带的声音工具"></a>Unity自带的声音工具</h2><p>Unity提供了基础的音频播放控制组件，主要有音频源 (Audio Source)和音频监听器 (Audio Listener)**。</p>
+<h4 id="音频剪辑-AudioClip"><a href="#音频剪辑-AudioClip" class="headerlink" title="音频剪辑 (AudioClip)"></a>音频剪辑 (AudioClip)</h4><p>自 Unity 5.0 开始，音频数据与实际音频剪辑 (AudioClip) 分离，音频剪辑仅仅是引用包含音频数据的文件。这意味着我们可以灵活的更具需要加载音频资源</p>
+<h4 id="音频监听器-Audio-Listener"><a href="#音频监听器-Audio-Listener" class="headerlink" title="音频监听器 (Audio Listener)"></a>音频监听器 (Audio Listener)</h4><p>监听器类似麦克风，它可以接收到任何距离足够近的Audio Source，并通过计算机扬声器播放声音。默认情况下，Unity会自动在主摄像机上挂载一个监听器。我们也可以选择挂在代表玩家的游戏对象上。</p>
+<h4 id="音频源-Audio-Source"><a href="#音频源-Audio-Source" class="headerlink" title="音频源 (Audio Source)"></a>音频源 (Audio Source)</h4><p>音频源就是“播放”音频信号的组件，AudioSource可以和某个AudioClip资源绑定在一起，游戏过程中播放音频内容。</p>
+<p>除了上面这些，还有可以给声音分组的混音器 (Audio Mixer) 等，如果是制作demo或者项目规模很小，给场景添加音效的最简单的方法就是在声音播放的地方 (比如道具或NPC物体上) 预先添加好各种AudioSource并与AudioClip绑定，再通过脚本代码激活播放。<br>但这种方式显然没有任何管理可言，随着音频资源的增多和播放需求的复杂化，控制代码的管理就会越来越让人头疼。</p>
+<h2 id="GameFramework-GF-的音频管理模块"><a href="#GameFramework-GF-的音频管理模块" class="headerlink" title="GameFramework(GF)的音频管理模块"></a>GameFramework(GF)的音频管理模块</h2><h3 id="GameFramework简介"><a href="#GameFramework简介" class="headerlink" title="GameFramework简介"></a>GameFramework简介</h3><p>GameFramework 是一个基于 Unity 引擎的游戏框架，主要对游戏开发过程中常用模块进行了封装，很大程度地规范开发过程、加快开发速度并保证产品质量。在最新的 Game Framework 版本中，包含以下 19 个内置模块，声音模块就是其中一个。</p>
+<h3 id="使用GF进行音频管理的原因"><a href="#使用GF进行音频管理的原因" class="headerlink" title="使用GF进行音频管理的原因"></a>使用GF进行音频管理的原因</h3><p>虽然已经有了Wwise这样专业的音频插件，但费用对于小项目组以及独立开发者来说还是有点难以负担。在因为公司的项目接触了GF的Sound模块之后发现和它的许多其他模块一样，Sound模块代码扩展性非常好，很值得学习，然后几个常见的音频管理问题，比如如何将音效按类型统一管理？在前面的管理基础上，如何控制同种音效的最大同时播放数量？音效间的优先级怎么处理等等问题都得到了很好的解决。</p>
+<h3 id="GF音频模块结构"><a href="#GF音频模块结构" class="headerlink" title="GF音频模块结构"></a>GF音频模块结构</h3><h4 id="SoundComponent"><a href="#SoundComponent" class="headerlink" title="SoundComponent"></a>SoundComponent</h4><p>和其他模块一样，这一层是在Unity侧对GF框架的SoundManager的一层封装，负责SoundManager的配置及初始化，还有各种播放音效相关的API。看一下代码中的Start方法：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	BaseComponent baseComponent = GameEntry.GetComponent&lt;BaseComponent&gt;();</span><br><span class="line">	<span class="keyword">if</span> (baseComponent == <span class="literal">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		Log.Fatal(<span class="string">&quot;Base component is invalid.&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	......</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (baseComponent.EditorResourceMode)</span><br><span class="line">	&#123;</span><br><span class="line">		m_SoundManager.SetResourceManager(baseComponent.EditorResourceHelper);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		m_SoundManager.SetResourceManager(GameFrameworkEntry.GetModule&lt;IResourceManager&gt;());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	SoundHelperBase soundHelper = Helper.CreateHelper(m_SoundHelperTypeName, m_CustomSoundHelper);</span><br><span class="line">	<span class="keyword">if</span> (soundHelper == <span class="literal">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		Log.Error(<span class="string">&quot;Can not create sound helper.&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	soundHelper.name = <span class="string">&quot;Sound Helper&quot;</span>;</span><br><span class="line">	Transform transform = soundHelper.transform;</span><br><span class="line">	transform.SetParent(<span class="keyword">this</span>.transform);</span><br><span class="line">	transform.localScale = Vector3.one;</span><br><span class="line"></span><br><span class="line">	m_SoundManager.SetSoundHelper(soundHelper);</span><br><span class="line">	</span><br><span class="line">	......</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; m_SoundGroups.Length; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!AddSoundGroup(m_SoundGroups[i].Name, m_SoundGroups[i].AvoidBeingReplacedBySamePriority, m_SoundGroups[i].Mute, m_SoundGroups[i].Volume, m_SoundGroups[i].AgentHelperCount))</span><br><span class="line">		&#123;</span><br><span class="line">			Log.Warning(<span class="string">&quot;Add sound group &#x27;&#123;0&#125;&#x27; failure.&quot;</span>, m_SoundGroups[i].Name);</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Start中主要做的事情有：为SoundManager设置资源管理器的引用，创建SoundHelper，初始化SoundGroup数组。</p>
+<p>SoundComponent中还有AudioMixer的引用，当添加新Group时也会添加对应的AudioMixerGroup</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (m_AudioMixer != <span class="literal">null</span>)</span><br><span class="line">&#123;</span><br><span class="line">    AudioMixerGroup[] audioMixerGroups = m_AudioMixer.FindMatchingGroups(Utility.Text.Format(<span class="string">&quot;Master/&#123;0&#125;&quot;</span>, soundGroupName));</span><br><span class="line">    <span class="keyword">if</span> (audioMixerGroups.Length &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        soundGroupHelper.AudioMixerGroup = audioMixerGroups[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        soundGroupHelper.AudioMixerGroup = m_AudioMixer.FindMatchingGroups(<span class="string">&quot;Master&quot;</span>)[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们就可以通过在SoundComponent的Inspector面板上设置不同的SoundGroup实现声音的分组管理。</p>
+<h4 id="SoundGroup"><a href="#SoundGroup" class="headerlink" title="SoundGroup"></a>SoundGroup</h4><p>SoundGroup是实现声音分组管理的核心类，主要接口如下：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">GameFramework.Sound</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 声音组接口。</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SoundGroup</span>:<span class="title">ISoundGroup</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 获取声音组名称。</span></span><br><span class="line">        <span class="built_in">string</span> Name</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 获取声音代理数。</span></span><br><span class="line">        <span class="built_in">int</span> SoundAgentCount</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 获取或设置声音组中的声音是否避免被同优先级声音替换。</span></span><br><span class="line">        <span class="built_in">bool</span> AvoidBeingReplacedBySamePriority</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 获取或设置声音组静音。</span></span><br><span class="line">        <span class="built_in">bool</span> Mute</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 获取或设置声音组音量。</span></span><br><span class="line">        <span class="built_in">float</span> Volume</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 获取声音组辅助器。</span></span><br><span class="line">        ISoundGroupHelper Helper</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 停止所有已加载的声音。</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">StopAllLoadedSounds</span>()</span>;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 停止所有已加载的声音。</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">StopAllLoadedSounds</span>(<span class="params"><span class="built_in">float</span> fadeOutSeconds</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="SoundAgent"><a href="#SoundAgent" class="headerlink" title="SoundAgent"></a>SoundAgent</h4><p>SoundAgent就是GF中播放声音的组件，我们不需要自己创建AudioSource，而是使用SoundAgent来播放声音。SoundAgent有一个ISoundAgentHelper接口的字段，这个接口在UGF层上的实现类是一个挂载了AudioSource组件的Mono类，它持有一个AudioSource的引用。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">GameFramework.Sound</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">SoundManager</span> : <span class="title">GameFrameworkModule</span>, <span class="title">ISoundManager</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 声音代理。</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SoundAgent</span> : <span class="title">ISoundAgent</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">private</span> <span class="keyword">readonly</span> SoundGroup m_SoundGroup;</span><br><span class="line">            <span class="keyword">private</span> <span class="keyword">readonly</span> ISoundHelper m_SoundHelper;</span><br><span class="line">            <span class="keyword">private</span> <span class="keyword">readonly</span> ISoundAgentHelper m_SoundAgentHelper;</span><br><span class="line">            <span class="keyword">private</span> <span class="built_in">object</span> m_SoundAsset;<span class="comment">//AudioClip</span></span><br><span class="line"></span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 播放声音。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Play</span>(<span class="params"><span class="built_in">float</span> fadeInSeconds</span>)</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 停止播放声音。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Stop</span>(<span class="params"><span class="built_in">float</span> fadeOutSeconds</span>)</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 暂停播放声音。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Pause</span>(<span class="params"><span class="built_in">float</span> fadeOutSeconds</span>)</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 恢复播放声音。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Resume</span>(<span class="params"><span class="built_in">float</span> fadeInSeconds</span>)</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 重置声音代理。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Reset</span>()</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	    <span class="comment"><span class="doctag">///</span> 声音代理辅助器接口，实现ISoundAgentHelper</span></span><br><span class="line">	    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SoundAgentHelper</span>:<span class="title">ISoundAgentHelper</span></span><br><span class="line">	    &#123;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 获取当前是否正在播放。</span></span><br><span class="line">	        <span class="built_in">bool</span> IsPlaying</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 获取声音长度。</span></span><br><span class="line">	        <span class="built_in">float</span> Length</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 获取或设置播放位置。</span></span><br><span class="line">	        <span class="built_in">float</span> Time</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 获取或设置是否静音。</span></span><br><span class="line">	        <span class="built_in">bool</span> Mute</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 获取或设置是否循环播放。</span></span><br><span class="line">	        <span class="built_in">bool</span> Loop</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 获取或设置声音优先级。</span></span><br><span class="line">	        <span class="built_in">int</span> Priority</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 获取或设置音量大小。</span></span><br><span class="line">	        <span class="built_in">float</span> Volume</span><br><span class="line">	        </span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 播放声音。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Play</span>(<span class="params"><span class="built_in">float</span> fadeInSeconds</span>)</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 停止播放声音。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Stop</span>(<span class="params"><span class="built_in">float</span> fadeOutSeconds</span>)</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 暂停播放声音。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Pause</span>(<span class="params"><span class="built_in">float</span> fadeOutSeconds</span>)</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 恢复播放声音。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Resume</span>(<span class="params"><span class="built_in">float</span> fadeInSeconds</span>)</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 重置声音代理辅助器。</span></span><br><span class="line">	        <span class="function"><span class="keyword">void</span> <span class="title">Reset</span>()</span>;</span><br><span class="line">	        <span class="comment"><span class="doctag">///</span> 设置声音资源。</span></span><br><span class="line">	        <span class="function"><span class="built_in">bool</span> <span class="title">SetSoundAsset</span>(<span class="params"><span class="built_in">object</span> soundAsset</span>)</span>;</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h4 id="SoundManager的资源管理"><a href="#SoundManager的资源管理" class="headerlink" title="SoundManager的资源管理"></a>SoundManager的资源管理</h4><p>SoundManager的资源加载卸载与UI模块大同小异，显然用的动态资源加载。值得注意的是也有人认为音频资源在游戏开发完后大多数情况下是不会改变的，即便是通过MOD添加新的音频，也不应该影响到其原有的音频资源，所以应该当作静态资源。</p>
+<h3 id="使用GF的声音模块"><a href="#使用GF的声音模块" class="headerlink" title="使用GF的声音模块"></a>使用GF的声音模块</h3><h4 id="音效的分组管理与播放优先级控制"><a href="#音效的分组管理与播放优先级控制" class="headerlink" title="音效的分组管理与播放优先级控制"></a>音效的分组管理与播放优先级控制</h4><p><strong>给所有音乐分层级实现分组控制播放与音量调整，每一层级的音效有一个最大播放数量限制，同层级音效间的播放顺序加入优先级判定</strong><br>这个比较简单，我们只需要把不同类型的声音分到不到同组，比如BGM、UI音效等，我们就可以统一控制每个组的整体音量。<br>SoundGroup内部以List的形式来储存多个SoundAgent，List的数量就是最大播放数量限制，可以在组件面板上编辑。每个SoundAgent上有一个bool变量IsPlaying标志该Agent是否正在播放，这个变量与实际播放声音的AudioSource组件的播放状态直接关联。如果List中所有的Agent都在播放中，则这次播放就有可能会失败</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ISoundAgent <span class="title">PlaySound</span>(<span class="params"><span class="built_in">int</span> serialId, <span class="built_in">object</span> soundAsset, PlaySoundParams playSoundParams, <span class="keyword">out</span> PlaySoundErrorCode? errorCode</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    errorCode = <span class="literal">null</span>;</span><br><span class="line">    SoundAgent candidateAgent = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">foreach</span> (SoundAgent soundAgent <span class="keyword">in</span> m_SoundAgents)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!soundAgent.IsPlaying)</span><br><span class="line">        &#123;</span><br><span class="line">            candidateAgent = soundAgent;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (soundAgent.Priority &lt; playSoundParams.Priority)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (candidateAgent == <span class="literal">null</span> || soundAgent.Priority &lt; candidateAgent.Priority)</span><br><span class="line">            &#123;</span><br><span class="line">                candidateAgent = soundAgent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!m_AvoidBeingReplacedBySamePriority &amp;&amp; soundAgent.Priority == playSoundParams.Priority)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (candidateAgent == <span class="literal">null</span> || soundAgent.SetSoundAssetTime &lt; candidateAgent.SetSoundAssetTime)</span><br><span class="line">            &#123;</span><br><span class="line">                candidateAgent = soundAgent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (candidateAgent == <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        errorCode = PlaySoundErrorCode.IgnoredDueToLowPriority;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!candidateAgent.SetSoundAsset(soundAsset))</span><br><span class="line">    &#123;</span><br><span class="line">        errorCode = PlaySoundErrorCode.SetSoundAssetFailure;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    candidateAgent.SerialId = serialId;</span><br><span class="line">    candidateAgent.SoundName = playSoundParams.SoundName;</span><br><span class="line">    candidateAgent.Time = playSoundParams.Time;</span><br><span class="line">    candidateAgent.MuteInSoundGroup = playSoundParams.MuteInSoundGroup;</span><br><span class="line">    candidateAgent.Loop = playSoundParams.Loop;</span><br><span class="line">    candidateAgent.Priority = playSoundParams.Priority;</span><br><span class="line">    candidateAgent.VolumeInSoundGroup = playSoundParams.VolumeInSoundGroup;</span><br><span class="line">    candidateAgent.Pitch = playSoundParams.Pitch;</span><br><span class="line">    candidateAgent.PanStereo = playSoundParams.PanStereo;</span><br><span class="line">    candidateAgent.SpatialBlend = playSoundParams.SpatialBlend;</span><br><span class="line">    candidateAgent.MaxDistance = playSoundParams.MaxDistance;</span><br><span class="line">    candidateAgent.DopplerLevel = playSoundParams.DopplerLevel;</span><br><span class="line">    candidateAgent.Play(playSoundParams.FadeInSeconds);</span><br><span class="line">    <span class="keyword">return</span> candidateAgent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从代码中可以看出来，每次播放SoundGroup会遍历SoundAgent的List，每次循环首先判定是否在播放，如果检测到未处于播放状态的SoundAgent，则直接作为最终播放的SoundAgent，终止循环；若处于播放状态则会对比优先级等内容：</p>
+<ol>
+<li>若新播放的音效的优先级比该SoundAgent当前播放的音效的优先级要低，则跳过，检测下一个SoundAgent。</li>
+<li>若新播放的音效的优先级比该SoundAgent当前播放的音效的优先级要高，则把这个SoundAgent作为候选的Agent然后继续遍历，后续有可能会用这个SoundAgent来播放新的音效而取代这个SoundAgent的当前音效。</li>
+<li>若新播放的音效的优先级比该SoundAgent当前播放的音效的优先级要相等，则要看该SoundGroup是否开启了避免同优先级取代（m_AvoidBeingReplacedBySamePriority字段）。如果开启，则跳过该Agent，如果关闭，则若候选Agent为空或候选Agent的开始播放时间晚于当前遍历的Agent，则把当前遍历的Agent设为候选。</li>
+</ol>
+<p>可以看出来GF的声音模块足以满足需求1</p>
+<h4 id="限制同一音效同时播放的数量"><a href="#限制同一音效同时播放的数量" class="headerlink" title="限制同一音效同时播放的数量"></a>限制同一音效同时播放的数量</h4><p>有时会出现一些特殊情况，比如怪物有受击音效，当怪物很多时，短时间会有很多怪物被击中，一起播放受击音效大概率会产生爆音。<br>解决这个问题很简单，直接在音效表增加一个播放间隔字段，每次播放时用当前时间加上播放间隔得到下次播放时间：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">PlayerSound</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(nextTriggerTime &lt; DateTime.Now.Ticks)</span><br><span class="line">    &#123;</span><br><span class="line">        nextTriggerTime = DateTime.Now.Ticks + <span class="keyword">this</span>.Interval * TimeSpan.TicksPerMillisecond;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="限制连续播放的数量"><a href="#限制连续播放的数量" class="headerlink" title="限制连续播放的数量"></a>限制连续播放的数量</h4><p>调试过程中策划又发现就算声音不会在设置的时间间隔内同时播放，当在某一段较长的时间内连续播放同一音效后，依然会给人带来不舒适的感觉，所以又增加了一个字段用来检查相同音效同时播放的数量，每次播放音效时遍历SoundGroup的SoundAgent的List：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">CheckSoundThreshhold</span>(<span class="params"><span class="built_in">string</span> soundName, <span class="built_in">int</span> interval</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; m_SoundAgents.Count; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (m_SoundAgents[i].SoundName == soundName &amp;&amp; (m_SoundAgents[i].SetSoundAssetTime - DateTime.UtcNow).TotalMilliseconds &lt; interval)</span><br><span class="line">        &#123;</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> num &lt; <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="音量-Volume-与音高-Pitch-的随机播放"><a href="#音量-Volume-与音高-Pitch-的随机播放" class="headerlink" title="音量(Volume)与音高(Pitch)的随机播放"></a>音量(Volume)与音高(Pitch)的随机播放</h4><p>策划希望能用一种音效呈现多种多样的听感，这里也是设置两个字段分别控制音高与音量的随机范围：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (drUISound.RandomPitch.Length == <span class="number">2</span>)              <span class="comment">//随机音高</span></span><br><span class="line">&#123;</span><br><span class="line">    playSoundParams.Pitch *= Random.Range(drUISound.RandomPitch[<span class="number">0</span>], drUISound.RandomPitch[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (drUISound.RandomVolume.Length == <span class="number">2</span>)             <span class="comment">//随机音量</span></span><br><span class="line">&#123;</span><br><span class="line">    playSoundParams.VolumeInSoundGroup *= Random.Range(drUISound.RandomVolume[<span class="number">0</span>], drUISound.RandomVolume[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/09/22/UGUI%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9D%97/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
