@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>状态模式 | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/Unity/">
+                            Unity
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                状态模式
+            
+            
+        </div>
+        <span class="post-date">
+            Jan 31, 2024
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="何为状态模式"><a href="#何为状态模式" class="headerlink" title="何为状态模式"></a>何为状态模式</h2><p>“让一个对象的行为随着其内部状态改变而变化，而该对象也像是换了类一样”。这句略显枯燥的话是GoF中对状态模式的定义。而我觉得《设计模式与完美游戏开发》一书中做的类比很棒——它用德鲁伊这个经常出现在各种西式RPG游戏中的一种职业来举例。<br>德鲁伊可以变换各种形态，比如常见的有熊形态，鹿形态，飞禽形态以及人形态等等。每变换成一种形态，德鲁伊就会具备这种形态对应的能力，比如变成熊形态提醒增大，伤害抗性增强；变成飞禽形态长出羽毛和翅膀可以翱翔天空；变成鹿形态可以跳跃着快速移动等等。这便是状态模式的第一个特征：拥有一系列可以来回切换的状态。<br>而第二个特征便是：当某个对象状态改变时，虽然在外界看来表现形式会有所变化，但改变是在对象内部进行，对外界封闭，换句话说，无论怎么变化，玩家操作的角色仍是德鲁伊，而不是死亡骑士或法师。同时与外界的交互方式也不会改变，比如玩家移动德鲁伊角色依然是使用通用的移动命令，至于是像熊一样或鹿一样奔跑还是像鸟一样飞行，并不需要玩家关心。</p>
+<h2 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h2><p>如果学过游戏开发，那么一定早就接触过有限状态机，特别是AI与动画开发中应用最多，Unity甚至还内置了一套动画状态机系统（Animator）。<br>有限状态机可以看作是最简单的图灵机，其核心要求是：</p>
+<ul>
+<li>你拥有一组状态，并可以在这组状态之间切换</li>
+<li>状态机同一时刻只能处于其中一种状态</li>
+<li>状态机会接受一组输入或事件</li>
+<li>每个状态有一组或转换，每个都关联一个输入并指向另一个状态。</li>
+</ul>
+<p>一个简单的状态机伪代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">State</span>&#123;</span><br><span class="line">	STATE_A,</span><br><span class="line">	STATE_B,</span><br><span class="line">	STATE_C</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span>(state)&#123;</span><br><span class="line">	<span class="keyword">case</span> STATE_A:</span><br><span class="line">	<span class="keyword">if</span></span><br><span class="line">	...</span><br><span class="line">	state = STATE_B;</span><br><span class="line">	<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> STATE_B:</span><br><span class="line">	<span class="keyword">if</span></span><br><span class="line">	...</span><br><span class="line">	state = STATE_C;</span><br><span class="line">	<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> STATE_C:</span><br><span class="line">	<span class="keyword">if</span></span><br><span class="line">	...</span><br><span class="line">	state = STATE_A;</span><br><span class="line">	<span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然简单，但使用switch语句却相比单纯的ifelse有了一个提升，虽然仍然有一些条件分支，但简化了状态的处理，所有处理单个状态的代码都集中到了一起。</p>
+<p>但是，在实践中很快就能发现，随着状态的增加，我们不得不在代码上下文中添加越来越多的变量或标志位，同时为了添加一个新状态需要修改多个地方。既然是面向对象编程，自然就会想要把这些变量和逻辑处理封装起来，这就是接下来要说的：状态模式。</p>
+<h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><h3 id="状态模式的结构"><a href="#状态模式的结构" class="headerlink" title="状态模式的结构"></a>状态模式的结构</h3><p><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F.drawio.png"></p>
+<p>状态模式的抽象结构如图所示。有一个抽象基类，负责统一规定所有状态可以具备的行为，同时也是暴露给状态的拥有者（这里就是Context）的操作接口；有一个状态拥有者，它有一个状态成员，比如游戏角色可以有一个状态属性，表示角色当前处于什么状态（移动&#x2F;攻击&#x2F;跳跃等等）；若干具体状态类，实现在某一特定状态下的行为。</p>
+<h3 id="状态模式的应用实例"><a href="#状态模式的应用实例" class="headerlink" title="状态模式的应用实例"></a>状态模式的应用实例</h3><p>GameFramework框架（不得不说这个框架真的厉害，确实写的优雅，有许多值得学习的地方）的流程模块就是一个典型的状态模式的应用。</p>
+<p>可以看到GF框架为流程模块准备了一个基类ProcedureBase，每个继承此基类的流程状态子类可以使用生命周期函数来进行流程间的变化。生命周期函数有OnInit，OnEnter，OnUpdate，OnLeave等。</p>
+<p>比如预加载流程ProcedurePreload，是一个在Procedure组件中已有定义的流程。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2023/11/07/Unity%E9%9F%B3%E9%A2%91%E6%A8%A1%E5%9D%97/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
