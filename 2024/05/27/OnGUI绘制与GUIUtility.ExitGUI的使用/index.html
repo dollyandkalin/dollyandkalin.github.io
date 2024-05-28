@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>OnGUI绘制与GUIUtility.ExitGUI的使用 | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/Unity/">
+                            Unity
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/tags/Unity-Editor/">
+                            Unity Editor
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                OnGUI绘制与GUIUtility.ExitGUI的使用
+            
+            
+        </div>
+        <span class="post-date">
+            May 27, 2024
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>最近在制作关卡编辑器时遇到了一个问题：该编辑器插件是用来显示与编辑关卡内每一波次怪物出现的情况与时机，编辑器窗口上有一部分区域是用OnGUI绘制的，现在策划要求再加上显示统计这一波次各种类怪物出现次数，于是我也在OnGUI中加上了这一部分，然后问题就出现了——Unity一直报错“<strong>ArgumentException: Getting control 0’s position in a group with only 0 controls when doing Repaint A</strong>”，从错误信息上看好像是OnGUI绘制时找不到具体的位置？但这又是怎么造成的呢，刚开始我一脸懵逼，后来在网上调查后才发现原来Unity的OnGUI函数每帧并不是仅仅只调用一次！</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>通常情况下（当没有其他输入事件时），会在GUILayout（可以是EditorGUILayout也可以是其他的GUILayout）和Repaint分别调用一次OnGUI，首先在GUILayer调用期间，将处理GUILayout调用并计算控件的位置和大小，此时不会绘制，即屏幕上实际上不会显示任何内容。其次，在调用Repaint时调用它去绘制控件，实际上是用上次调用时计算出的位置和大小绘制的。</p>
+<p>当有一个有效输入（鼠标，键盘等）发生时，也会调用一次OnGUI，此调用也会在屏幕上绘图，并且发生在上述两次调用之后。按照上述的逻辑可以知道，如果在两次绘制的OnGUI的间隔发生了界面元素布局的改变，则Unity就可能因为前后位置不一致（特别是使用EditorGUILayout自动布局时）而报错，因为第二次绘制时依然使用的是GUILayout调用期间计算出来的控件位置。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ol>
+<li>EditorGUILayout是EditorGUI的自动布局版本，使用EditorGUI替代，传入计算好的位置，可以保证位置信息不出错</li>
+<li>如果依然要使用EditorGUILayout自动布局，则可以使用Unity提供的GUIUtility.ExitGUI，在更新数据的代码段后调用此API可以防止报错</li>
+</ol>
+<h2 id="GUIUtility-ExitGUI"><a href="#GUIUtility-ExitGUI" class="headerlink" title="GUIUtility.ExitGUI"></a>GUIUtility.ExitGUI</h2><p>官方文档中是这样描述它的作用：</p>
+<blockquote>
+<p>Puts the GUI in a state that will prevent all subsequent immediate mode GUI functions from evaluating for the remainder of the GUI loop by throwing an <a target="_blank" rel="noopener" href="https://docs.unity3d.com/ScriptReference/ExitGUIException.html">ExitGUIException</a>.</p>
+</blockquote>
+<p>意思是<a target="_blank" rel="noopener" href="https://docs.unity3d.com/ScriptReference/GUIUtility.ExitGUI.html">ExitGUI</a>通过抛出[ExitGUIException]异常来终断后续的IMGUI方法调用。</p>
+<p>ExitGUI的API文档中也提到了IMGUI绘制的原理，和上文描述的大致相同。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2024/01/31/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
