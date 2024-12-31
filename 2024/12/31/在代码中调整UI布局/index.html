@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Molasses">
+
+
+
+
+
+
+
+<title>在代码中调整UI布局 | Molasses&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/webp.webp">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/frame.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Game Craftsmanship.
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">Categories</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">Tags</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about/">About</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/Unity/">
+                            Unity
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                在代码中调整UI布局
+            
+            
+        </div>
+        <span class="post-date">
+            Dec 31, 2024
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>做UI的时候，经常需要调整界面元素的排布或使其自适应，使用Unity给的组件吧，比如Horizontal&#x2F;Vertical Layout Group 与Content Size Fitter的组合拳，虽然很方便，也能解决问题，但一个界面上这样的组件多了之后不光设置起来麻烦，还有不小的性能消耗。其实只要我们掌握了两点，就能直接用代码实现这些布局需求。</p>
+<h3 id="什么是锚点和轴心点？"><a href="#什么是锚点和轴心点？" class="headerlink" title="什么是锚点和轴心点？"></a>什么是锚点和轴心点？</h3><p>这个问题很长一段时间我都没有彻底弄明白，还经常混淆这两个概念。知道后来看过一篇文章后才慢慢形成了印象——锚点（anchors）和轴心点（pivot）共同确定了此UI元素的中心到其父UI元素的矩形边界的四个顶点的距离。</p>
+<p>先来熟悉一下锚点：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_230230.png"><br>X和Y的四个值都是0.5，注意到左上角的图示</p>
+<p>然后我将X的min和max值都改为0，现在不光值变了，左上角的示意图也改变了<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_230243.png"></p>
+<p>其实Xmin，Xmax，Ymin，Ymax这四个值就是代表着父节点的四个点的位置，第一张图四个点的值都为0，代表着这四个点都重合在父节点的矩形正中心这一位置，如下图：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_230210.png"></p>
+<p>第二张图X的值都为0，说明此时这四个点重合于父节点矩形的左侧边的中点上，如下图：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_231610.png"></p>
+<p>由上可以推断，像下面这样的情况，锚点的四个值肯定是Xmin &#x3D; Ymin &#x3D; 0, Xmax &#x3D; Ymax &#x3D; 1：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_231817.png"></p>
+<p>光清楚锚点还不够，接下来是中心点。这个中心点并不一定就是该元素的矩形包围盒的几何中心，可以注意到pivot也有两个值X和Y，值得范围都是0~1，显然代表着中心点（图上的圆圈）与矩形包围盒的四条边的距离。</p>
+<p>有了中心点，有了锚点，就有了RectTransform组件的隐藏属性——Anchored Position。在debug模式可以看到：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_232730.png"></p>
+<p>再做几个测试：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_233516.png"></p>
+<p><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_233533.png"></p>
+<p><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_233548.png"></p>
+<p>不难看出，Anchored Position的含义就是Pivot与四个锚点的几何中心的距离，那么知道Anchored Position有什么用呢？</p>
+<h3 id="有用的API"><a href="#有用的API" class="headerlink" title="有用的API"></a>有用的API</h3><p>Unity的RectTransform组件提供了这两个方法：<br><img src="https://raw.githubusercontent.com/dollyandkalin/Image/main/PicGo/2024-12-31_233948.png"></p>
+<p>比如，当我们需要给一个界面上的一组元素设置纵向排列，并且界面的纵向大小也能根据内容自适应时，就可以在代码中分别对每一个需要加入排列的元素调用第一个方法# SetInsetAndSizeFromParentEdge，设置参数Edge.Top（距离顶部边界的距离）以及距离和该元素自身的纵向尺寸，然后对界面调用# SetSizeWithCurrentAnchors，设置界面的纵向尺寸，来实现自适应效果。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2024/12/18/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8D%8F%E7%A8%8B/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
